@@ -1,26 +1,24 @@
 <?php
-class DB{
+class DB {
     private static $pdo = null;
     private function __construct() {}
 
-	//Заполнение БД тестовыми данными
-	public static function fillDB(){
-		$connection = self::connectToDB();
+    public static function fillDB() {
+        $pdo = self::connectToDB();
 
-		//Наличие таблицы User
-		$result = pg_query($connection, "SELECT to_regclass('public.\"User\"');");
-        $tableExists = pg_fetch_result($result, 0, 0) !== null;
+        $stmt = $pdo->query("SELECT to_regclass('public.\"User\"')");
+        $tableExists = $stmt->fetchColumn() !== null;
 
-		if (!$tableExists) {
+        if (!$tableExists) {
             $createTableQuery = "
                 CREATE TABLE \"User\" (
                     id SERIAL PRIMARY KEY,
-					email VARCHAR(100) NOT NULL,
+                    email VARCHAR(100) NOT NULL,
                     login VARCHAR(100) NOT NULL,
-					password VARCHAR(100) NOT NULL
+                    password VARCHAR(100) NOT NULL
                 );
             ";
-            pg_query($connection, $createTableQuery);
+            $pdo->exec($createTableQuery);
 
             $insertDataQuery = "
                 INSERT INTO \"User\" (email, login, password) 
@@ -28,19 +26,22 @@ class DB{
                     ('andrey@example.com', 'andrey', 'qwerty'),
                     ('admin@example.com', 'admin', 'admin');
             ";
-            pg_query($connection, $insertDataQuery);
+            $pdo->exec($insertDataQuery);
         }
-	}
+    }
 
-	public static function connectToDB() {
-        $dsn = "pgsql:host=db;port=5432;dbname=mydb;user=root;password=root";
-        if(self::$pdo === null) {
+    public static function connectToDB() {
+        if (self::$pdo === null) {
             try {
-                self::$pdo = new PDO($dsn);
+                $dsn = "pgsql:host=db;port=5432;dbname=mydb";
+                $username = "root";
+                $password = "root";
+                self::$pdo = new PDO($dsn, $username, $password);
+                self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //чтобы выбрасывал ошибки
             } catch (PDOException $e) {
-                echo "Ошибка подключения: " . $e->getMessage();
+                die("Ошибка подключения: " . $e->getMessage());
             }
         }
-		return self::$pdo;
-	}
+        return self::$pdo;
+    }
 }
