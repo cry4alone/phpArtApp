@@ -2,7 +2,7 @@
 
 class IndexController extends Controller {
 
-	private $pageTpl = '/views/main.tpl.php';
+	private $pageTpl = '/views/index.tpl.php';
 
 	public function __construct() {
 		$this->model = new IndexModel();

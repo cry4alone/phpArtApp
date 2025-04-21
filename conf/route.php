@@ -15,7 +15,7 @@ class Routing{
 
         /*Определяем контроллер*/
 		if($route[1] != '') {
-			$controllerName = ucfirst($route[1]. "Controller");
+			$controllerName = ucfirst(strtolower($route[1])) . "Controller";
 			$modelName = ucfirst($route[1]. "Model");
 		}
 		require_once (CONTROLLER_PATH . $controllerName . ".php"); //IndexController.php

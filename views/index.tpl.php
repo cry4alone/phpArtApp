@@ -9,6 +9,13 @@
     <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
-    <p>mainpage!!!</p>
+    <div class="IndexText">
+        <div>
+            Main template
+        </div>
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonLight" data-bs-toggle="dropdown" aria-expanded="false">
+            Default dropdown
+        </button>
+    </div>
 </body>
 </html>
