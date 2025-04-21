@@ -1,2 +1,2 @@
 <?php
-echo "Hello PHP!";
+require_once("conf/config.php");

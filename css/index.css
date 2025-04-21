@@ -1,0 +1,8 @@
+.IndexText {
+    margin-top: 50vh;
+    font-size: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
