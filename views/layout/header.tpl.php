@@ -8,24 +8,39 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/css/index.css">
 </head>
+<body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <!-- Левая часть: заголовок -->
+    <a class="navbar-brand" href="/main">
+        <img src='./images/logo.png' width="40" height="40" class="d-inline-block align-text-top">
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Левая часть: меню -->
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Галерея</a>
+          <a class="nav-link active" aria-current="page" href="/main">Галерея</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/index">О нас</a>
+          <a class="nav-link" href="/about">О нас</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Контакты</a>
+          <a class="nav-link" href="/contacts">Контакты</a>
+        </li>
+      </ul>
+
+      <!-- Правая часть: элемент профиля -->
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="navbar-brand" href="#">
+            <img src="./images/person-circle.svg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+          </a>
         </li>
       </ul>
     </div>
   </div>
 </nav>
+</body>

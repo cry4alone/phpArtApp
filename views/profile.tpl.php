@@ -1,0 +1,3 @@
+<body>
+    Gallery page!
+</body>
