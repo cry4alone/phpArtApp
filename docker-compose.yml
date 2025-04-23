@@ -8,7 +8,7 @@ services:
       - "8080:80"
     depends_on:
       - db
-    command: sh -c "php /var/www/html/conf/init_db.php && apache2-foreground"
+    command: sh -c "php /var/www/html/conf/init_db.php && a2enmod rewrite && apache2-foreground"
   db:
     image: postgres:latest
     environment:

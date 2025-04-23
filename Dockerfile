@@ -7,9 +7,6 @@ RUN apt-get update && apt-get install -y \
     gnupg \
     && docker-php-ext-install pdo_pgsql pgsql
 
-# Включение mod_rewrite
-RUN a2enmod rewrite
-
 # Копирование пользовательского конфигурационного файла Apache
 COPY apache.conf /etc/apache2/sites-available/000-default.conf
 
