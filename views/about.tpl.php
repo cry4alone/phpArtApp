@@ -1,3 +1,3 @@
 <body>
-    About us page!
+    About page!
 </body>
