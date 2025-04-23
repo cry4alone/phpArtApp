@@ -10,7 +10,8 @@ class IndexController extends Controller {
 	}
 
 	public function index() {
-		$this->pageData['title'] = "Index controller";
-		$this->view->render($this->pageTpl, $this->pageData);
+		header("Location: /login");
+		//$this->pageData['title'] = "Index controller";
+		//$this->view->render($this->pageTpl, $this->pageData);
 	}
 }
