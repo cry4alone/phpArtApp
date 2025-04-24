@@ -3,7 +3,7 @@
         <div class='container-lg d-flex justify-content-between align-items-center mt-3 gap-5'>
             <p class='display-4 mb-0'>Ваш профиль</p>
             <div class='d-flex justify-content-between align-items-center mt-3 gap-3'>
-                <img src='./images/icons/person-circle.svg' alt='person' width="50" height="50">
+                <img src='./public/images/icons/person-circle.svg' alt='person' width="50" height="50">
                 <div class='d-flex flex-column justify-content-center align-items-start'>
                     <p class='fs-4 mb-0'><?php echo $pageData['login']; ?></p>
                     <p class='fs-6 mb-0'><?php echo $pageData['email']; ?></p>

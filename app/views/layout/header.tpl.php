@@ -14,7 +14,7 @@
   <div class="container-fluid">
     <!-- Левая часть: заголовок -->
     <a class="navbar-brand" href="/main">
-        <img src='./images/assets/logo.png' width="40" height="40" class="d-inline-block align-text-top">
+        <img src='./public/images/assets/logo.png' width="40" height="40" class="d-inline-block align-text-top">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -37,7 +37,7 @@
       <ul class="navbar-nav ms-auto me-3">
         <li class="nav-item dropdown">
             <a class="btn dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="./images/icons/person-circle.svg" alt="Profile" width="30" height="24" class="d-inline-block align-text-top">
+                <img src="./public/images/icons/person-circle.svg" alt="Profile" width="30" height="24" class="d-inline-block align-text-top">
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="/profile">Профиль</a></li>
