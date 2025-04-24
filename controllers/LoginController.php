@@ -8,23 +8,23 @@ class LoginController extends Controller {
 
     public function index() {
         $this->pageData['title'] = 'Вход';
+        $this->view->render($this->pageTpl, $this->pageData);
+    }
 
+    public function checklogin() {
         if(!empty($_POST)) {
             $login = $_POST['login'];
             $password =$_POST['password'];
 
-            if($this->checklogin($login, $password)){
+            if($this->model->checklogin($login, $password)){
                 header("Location: /main");
+                exit;
             }
             else{
-                $this->pageData['error'] = "Неверный логин или пароль";
+                $_SESSION['error'] = 'Неверный логин или пароль';
+                header("Location: /login");
+                exit;
             }
 		}
-
-        $this->view->render($this->pageTpl, $this->pageData);
-    }
-
-    public function checklogin($login, $password) {
-		return $this->model->checklogin($login, $password);
     }
 }
