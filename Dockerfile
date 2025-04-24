@@ -3,15 +3,18 @@ FROM php:apache
 # Установка зависимостей
 RUN apt-get update && apt-get install -y \
     libpq-dev \
+    zip \
+    unzip \
+    git \
     curl \
     gnupg \
     && docker-php-ext-install pdo_pgsql pgsql
 
-# Копирование пользовательского конфигурационного файла Apache
-COPY apache.conf /etc/apache2/sites-available/000-default.conf
+# Установка Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Копирование файлов проекта
-COPY . /var/www/html/
+# Копирование пользовательского конфига Apache
+COPY apache.conf /etc/apache2/sites-available/000-default.conf
 
 # Открытие порта
 EXPOSE 80
