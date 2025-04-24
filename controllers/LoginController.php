@@ -14,7 +14,7 @@ class LoginController extends Controller {
     public function checklogin() {
         if(!empty($_POST)) {
             $login = $_POST['login'];
-            $password =$_POST['password'];
+            $password = $_POST['password'];
 
             if($this->model->checklogin($login, $password)){
                 header("Location: /main");

@@ -1,16 +1,24 @@
 <?php
 class LoginModel extends Model {
     public function checkLogin($login, $password) {
-        $sql = "SELECT * FROM \"User\" WHERE login = :login AND password = :password";
+        $sql = "SELECT * FROM \"User\" WHERE login = :login";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(['login' => $login,'password'=> $password]);
+        $stmt->execute(['login' => $login]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if($user){
-            return true;
-        }
-        else{
+        if (!$user) {
             return false;
+        }
+
+        if (!password_verify($password, $user['password'])) {
+            return false;
+        }
+
+        if($user){
+            $_SESSION['login'] = $user['login'];
+            $_SESSION['id'] = $user['id'];
+            $_SESSION['email'] = $user['email'];
+            return true;
         }
     }
 }

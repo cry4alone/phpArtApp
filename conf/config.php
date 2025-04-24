@@ -1,4 +1,5 @@
 <?php
+ini_set("session.cookie_lifetime", 86400); //1 day
 session_start();
 
 define('ROOT', $_SERVER['DOCUMENT_ROOT']);

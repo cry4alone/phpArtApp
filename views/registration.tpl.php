@@ -12,22 +12,22 @@
   <div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
     <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
       <h3 class="text-center mb-4">Регистрация</h3>
-      <form>
+      <form method='post' action="registration/registration">
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" placeholder="Введите почту">
+          <input type="email" class="form-control" id="email" name='email' placeholder="Введите почту">
         </div>
         <div class="mb-3">
           <label for="login" class="form-label">Логин</label>
-          <input type="text" class="form-control" id="login" placeholder="Введите логин">
+          <input type="text" class="form-control" id="login" name='login' placeholder="Введите логин">
         </div>
         <div class="mb-3">
           <label for="password" class="form-label">Пароль</label>
-          <input type="password" class="form-control" id="password" placeholder="Введите пароль">
+          <input type="password" class="form-control" id="password" name='password' placeholder="Введите пароль">
         </div>
         <div class="mb-4">
           <label for="password-retry" class="form-label">Повтор пароля</label>
-          <input type="password" class="form-control" id="password-retry" placeholder="Повторите пароль">
+          <input type="password" class="form-control" id="password-retry" name='password-retry' placeholder="Повторите пароль">
         </div>
         <div class="d-grid mb-3">
           <button type="submit" class="btn btn-primary">Зарегистрироваться</button>

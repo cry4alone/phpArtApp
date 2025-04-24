@@ -1,4 +1,10 @@
 RewriteEngine On
+
+# Если запрос идет на корень сайта (/), выполняем редирект на /main
+RewriteCond %{REQUEST_URI} ^/$
+RewriteRule ^(.*)$ /main [R=301,L]
+
+# Если запрашиваемый файл или директория не существует, перенаправляем запросы на index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [QSA,L]
