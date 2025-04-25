@@ -1,17 +1,51 @@
 <?php
 class RegistrationModel extends Model {
-    public function addUser($login, $password, $email) {
-        $checkSql = "SELECT COUNT(*) FROM \"User\" WHERE login = :login OR email = :email";
-        $checkStmt = $this->db->prepare($checkSql);
-        $checkStmt->execute(['login' => $login, 'email' => $email]);
-        $count = $checkStmt->fetchColumn();
-
-        if ($count > 0) {
-            throw new Exception('Пользователь с таким логином или почтой уже существует');
-        }
-
-        $sql = "INSERT INTO \"User\" (login, password, email) VALUES (:login, :password, :email)";
+    public function loginIsUse($login) {
+        $sql = "SELECT * FROM \"User\" WHERE login = :login";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(['login' => $login, 'password' => $password, 'email' => $email]);
+        $stmt->execute(['login' => $login]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($user){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
+
+    public function emailIsUse($email) {
+        $sql = "SELECT * FROM \"User\" WHERE email = :email";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($user){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public function addNewUser($email, $login, $password) {
+        $insertDataQuery = "
+        INSERT INTO \"User\" (email, login, password) 
+        VALUES (:email, :login, :password);
+    ";
+    
+    $stmt = $this->db->prepare($insertDataQuery);
+    $success = $stmt->execute([
+        'email' => $email,
+        'login' => $login,
+        'password' => $password
+    ]);
+        
+        if ($success) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

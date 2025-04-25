@@ -15,6 +15,7 @@ require_once(VIEW_PATH. 'View.php');
 require_once(CONTROLLER_PATH. 'Controller.php');
 
 require_once(ROOT . '/conf' . '/functions.php');
+require_once(ROOT . '/vendor/autoload.php');
 
 Routing::buildRoute();
 
