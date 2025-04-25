@@ -1,3 +1,10 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+$formData = $_SESSION['password_recovery_form_data'] ?? [];
+unset($_SESSION['password_recovery_form_data']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +22,8 @@
       <form method="post" action="/passwordrecovery/resetpassword">
         <div class="mb-4">
           <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" name="email" placeholder="Введите почту">
+          <input type="email" class="form-control" id="email" name="email" 
+          value="<?= htmlspecialchars($formData['email'] ?? '') ?>" placeholder="Введите почту">
         </div>
         <div class="mb-3">
           <label for="newpassword" class="form-label">Новый пароль</label>

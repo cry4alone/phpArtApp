@@ -1,3 +1,10 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+$formData = $_SESSION['registration_form_data'] ?? [];
+unset($_SESSION['registration_form_data']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,11 +22,13 @@
       <form id="registration-form" method="post" action="/registration/checkuser">
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" name="email" placeholder="Введите почту" required>
+          <input type="email" class="form-control" id="email" name="email"
+           value="<?= htmlspecialchars($formData['email'] ?? '') ?>" placeholder="Введите почту" required>
         </div>
         <div class="mb-3">
           <label for="login" class="form-label">Логин</label>
-          <input type="text" class="form-control" id="login" name="login" placeholder="Введите логин" required>
+          <input type="text" class="form-control" id="login" name="login"
+          value="<?= htmlspecialchars($formData['login'] ?? '') ?>" placeholder="Введите логин" required>
         </div>
         <div class="mb-3">
           <label for="password" class="form-label">Пароль</label>
