@@ -1,5 +1,5 @@
 <body>
-    <div class='container-fluid d-flex flex-column justify-content-center align-items-center mt-5'>
+    <div class='container-md d-flex flex-column justify-content-center align-items-center mt-5'>
         <div class="input-group w-50">
             <input type="text" class="form-control" placeholder="Поиск">
             <span class="input-group-text">

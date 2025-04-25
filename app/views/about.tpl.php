@@ -1,5 +1,5 @@
 <body>
-    <div class='conatiner-fluid d-flex flex-column justify-content-center align-items-center mt-5'>
+    <div class='conatiner-fluid d-flex flex-column justify-content-center align-items-center m-5'>
         <h1 class='display-3 my-5'>Pixels — место, где оживают истории.</h1>
 
         <div class='container-fluid d-flex flex-row justify-content-center align-items-center mt-5 gap-3'>
@@ -14,10 +14,12 @@
             <img src='./public/images/assets/aboutImg_2.jpg' width='500' height='300' class='img-fluid rounded'>
             <p>Наша миссия — объединить людей через искусство фотографии. Мы стремимся создать пространство, где творчество встречается с вдохновением, а красота мира становится доступной каждому. Неважно, являетесь ли вы профессиональным фотографом или только начинаете свой путь, — здесь каждый найдет что-то особенное.</p>
         </div>
+        </div>
+        <div class='bg-primary-subtle d-flex justify-content-center align-items-center py-5 '>
+            <h1 class='h3'>
+                    Присоединяйтесь к нам, чтобы делиться,<br> вдохновляться и видеть мир глазами других.
+            </h1>
+            <!-- <a type="button" href='/registration' class="btn btn-outline-primary mt-3">Регистрация</a> -->
+        </div>
 
-        <h1 class='h3 mt-5'>
-            Присоединяйтесь к нам, чтобы делиться,<br> вдохновляться и видеть мир глазами других.
-        </h1>
-        <a type="button" href='/registration' class="btn btn-outline-primary mt-3">Регистрация</a>
-    </div>
 </body>
