@@ -27,11 +27,28 @@ class RegistrationController extends Controller {
     }
 
     public function checkuser() {
-        if(!empty($_POST) && !empty($_POST['email']) && !empty($_POST['login']) && !empty($_POST['password'])) {
+        if(!empty($_POST) && !empty($_POST['email']) && !empty($_POST['login']) && !empty($_POST['password']) && !empty($_POST['password-retry'])) {
             $email = $_POST['email'];
             $login = $_POST['login'];
             $password = $_POST['password'];
-            if($this->model->emailIsUse($email)){
+            $passwordRetry = $_POST['password-retry'];
+            
+            if($password != $passwordRetry){
+                $_SESSION['error'] = 'Пароли не совпадают';
+                header("Location: /registration");
+                exit;
+            }
+            else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $_SESSION['error'] = 'Некорректный email';
+                header("Location: /registration");
+                exit;
+            }
+            else if(strlen($password) < 5){
+                $_SESSION['error'] = 'Пароль не может быть меньше 5 символов';
+                header("Location: /registration");
+                exit;
+            }
+            else if($this->model->emailIsUse($email)){
                 $_SESSION['error'] = 'Данный email уже используется';
                 header("Location: /registration");
                 exit;
@@ -44,7 +61,7 @@ class RegistrationController extends Controller {
             else{
                 $_SESSION["registration-email"] = $email;
                 $_SESSION["registration-login"] = $login;
-                $_SESSION["registration-password"] = $password;
+                $_SESSION["registration-password"] = password_hash($password, PASSWORD_DEFAULT);
 
                 try {
                     $code = sendVerifyCode($email);

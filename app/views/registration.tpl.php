@@ -27,7 +27,7 @@
         </div>
         <div class="mb-4">
           <label for="password-retry" class="form-label">Повтор пароля</label>
-          <input type="password" class="form-control" id="password-retry" placeholder="Повторите пароль" required>
+          <input type="password" class="form-control" id="password-retry" name="password-retry" placeholder="Повторите пароль" required>
         </div>
         <div id="error-message" class="text-danger mb-3" style="display: none;"></div>
         <div class="d-grid mb-3">
@@ -36,38 +36,5 @@
       </form>
     </div>
   </div>
-
-  <script>
-    document.getElementById('registration-form').addEventListener('submit', function (e) {
-      const email = document.getElementById('email').value.trim();
-      const login = document.getElementById('login').value.trim();
-      const password = document.getElementById('password').value;
-      const passwordRetry = document.getElementById('password-retry').value;
-      const errorDiv = document.getElementById('error-message');
-      errorDiv.style.display = 'none';
-      errorDiv.textContent = '';
-
-      if (!email || !login || !password || !passwordRetry) {
-        e.preventDefault();
-        errorDiv.textContent = 'Пожалуйста, заполните все поля.';
-        errorDiv.style.display = 'block';
-        return;
-      }
-
-      if (password !== passwordRetry) {
-        e.preventDefault();
-        errorDiv.textContent = 'Пароли не совпадают.';
-        errorDiv.style.display = 'block';
-        return;
-      }
-
-      if (password.length < 5) {
-        e.preventDefault();
-        errorDiv.textContent = 'Пароль должен быть не менее 5 символов.';
-        errorDiv.style.display = 'block';
-        return;
-      }
-    });
-  </script>
 </body>
 </html>

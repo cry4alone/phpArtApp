@@ -23,7 +23,7 @@
         </div>
         <div class="mb-4">
           <label for="password-retry" class="form-label">Повтор пароля</label>
-          <input type="password" class="form-control" id="password-retry" placeholder="Повторите пароль" required>
+          <input type="password" class="form-control" id="password-retry" name="password-retry" placeholder="Повторите пароль" required>
         </div>
         <div class="d-grid mb-2">
           <button type="submit" class="btn btn-primary">Отправить код</button>
