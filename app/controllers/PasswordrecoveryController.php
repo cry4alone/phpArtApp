@@ -25,35 +25,55 @@ class PasswordrecoveryController extends Controller {
     }
 
     public function resetpassword() {
-        if(!empty($_POST) && !empty($_POST['email']) && !empty($_POST['newpassword'])){
-            $email = $_POST['email'];
-            $newpassword = $_POST['newpassword'];
-            if(!$this->model->emailIsUse($email)){
-                $_SESSION['error'] = 'Данный email не используется';
-                header("Location: /passwordrecovery");
-                exit;
-            }
-            else{
-                $_SESSION["reset-password-email"] = $email;
-                $_SESSION["newpassword"] = $newpassword;
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $_SESSION['password_recovery_form_data'] = $_POST;
+            if(!empty($_POST) && !empty($_POST['email']) && !empty($_POST['newpassword']) && !empty($_POST['password-retry'])){
+                $email = $_POST['email'];
+                $newpassword = $_POST['newpassword'];
+                $passwordRetry = $_POST['password-retry'];
 
-                try {
-                    $code = sendVerifyCode($email);
-                    $_SESSION['verifyCode'] = [
-                        'code' => $code,
-                        'expires_at' => time() + 300
-                ];
-                } catch (Exception $e) {
-                    $_SESSION['error'] = $e->errorMessage();
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $_SESSION['error'] = 'Некорректный email';
                     header("Location: /passwordrecovery");
                     exit;
                 }
+                else if($newpassword != $passwordRetry) {
+                    $_SESSION['error'] = 'Пароли не совпадают';
+                    header("Location: /passwordrecovery");
+                    exit;
+                }
+                else if(strlen($newpassword) < 5){
+                    $_SESSION['error'] = 'Пароль не может быть меньше 5 символов';
+                    header("Location: /passwordrecovery");
+                    exit;
+                }
+                else if(!$this->model->emailIsUse($email)){
+                    //$_SESSION['error'] = 'Данный email не используется';
+                    header("Location: /passwordrecovery/codeverify");
+                    exit;
+                }
+                else{
+                    $_SESSION["reset-password-email"] = $email;
+                    $_SESSION["newpassword"] = password_hash($newpassword, PASSWORD_DEFAULT);
 
-                header("Location: /passwordrecovery/codeverify");
-                exit;
+                    try {
+                        $code = sendVerifyCode($email);
+                        $_SESSION['verifyCode'] = [
+                            'code' => $code,
+                            'expires_at' => time() + 300
+                    ];
+                    } catch (Exception $e) {
+                        $_SESSION['error'] = $e->errorMessage();
+                        header("Location: /passwordrecovery");
+                        exit;
+                    }
+
+                    header("Location: /passwordrecovery/codeverify");
+                    exit;
+                }
             }
+            $_SESSION['error'] = 'Не все необходимые поля заполнены';
+            header("Location: /passwordrecovery");
         }
-        $_SESSION['error'] = 'Не все необходимые поля заполнены';
-        header("Location: /passwordrecovery");
     }
 }

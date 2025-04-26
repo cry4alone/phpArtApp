@@ -27,8 +27,8 @@ class CodeverifyController extends Controller {
             if (isset($_SESSION['verifyCode'])) {
                 if (time() > $_SESSION['verifyCode']['expires_at']) {
                     unset($_SESSION['verifyCode']);
-                    $_SESSION['error'] = 'Время действия кода истекло';
-                    header("Location: $previousSegmentURL");
+                    $_SESSION['error'] = 'Неверный код';
+                    header("Location: $currControllerURL");
                     exit;
                 } else {
                     if($code == $_SESSION['verifyCode']['code']) {
@@ -36,14 +36,14 @@ class CodeverifyController extends Controller {
                         header("Location: $previousSegmentURL");
                     }
                     else {
-                        $_SESSION['error'] = 'Код не совпадает';
+                        $_SESSION['error'] = 'Неверный код';
                         header("Location: $currControllerURL");
                     }
                     exit;
                 }
             }
         }
-        $_SESSION['error'] = 'Введите код';
+        $_SESSION['error'] = 'Неверный код';
         header("Location: $currControllerURL");
         exit;
     }
