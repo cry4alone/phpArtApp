@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y \
     gnupg \
     && docker-php-ext-install pdo_pgsql pgsql
 
+RUN mkdir -p ./public/images/uploads
+RUN chmod -R 775 ./public/images/uploads
+
 # Установка Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 

@@ -29,4 +29,19 @@ Class ProfileController extends Controller {
             exit;
         }
     }
+
+    public function addNewPost() {
+        $allowed_types = ["jpg", "png"];
+        $file_extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+
+        if(!in_array($file_extension, $allowed_types)) {
+            $_SESSION['error'] = "Неверный тип файла";
+            header("Location: /profile");
+            exit;
+        }
+
+        $filename = uniqid() . "." . $file_extension;
+
+        move_uploaded_file($_FILES['file']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . "/public/images/uploads/" . $filename);
+    }
 }

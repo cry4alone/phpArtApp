@@ -6,6 +6,7 @@
         echo '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>';
         echo '</div>';
     }
+    unset($_SESSION['error']);
 ?>
 
 <script>
