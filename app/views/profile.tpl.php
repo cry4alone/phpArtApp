@@ -25,30 +25,16 @@
         </div>
 
         <div class='container-lg d-flex justify-content-center align-items-center mt-3 gap-5'>
+            <?php foreach($pageData['images'] as $image):?>
             <div class='card'>
-                <img src='./public/images/assets/example.jpg' class='rounded'>
+                <img width='400' height='400' src="<?php echo"./public/images/uploads/" . $image["filename"]?>" class='rounded'>
                 <div class='card-body'>
-                    <h5 class='card-title'>Card title</h5>
-                    <p class='card-text'>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <h5 class='card-title'><?php echo $image["title"] ?></h5>
+                    <p class='card-text'><?php echo $image["description"] ?></p>
                     <a href='profile/publish' class="btn btn-primary">Опубликовать</a>
                 </div>
             </div>
-            <div class='card'>
-                <img src='./public/images/assets/example.jpg' class='rounded'>
-                <div class='card-body'>
-                    <h5 class='card-title'>Card title</h5>
-                    <p class='card-text'>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href='profile/publish' class="btn btn-primary">Опубликовать</a>
-                </div>
-            </div>
-            <div class='card'>
-                <img src='./public/images/assets/example.jpg' class='rounded'>
-                <div class='card-body'>
-                    <h5 class='card-title'>Card title</h5>
-                    <p class='card-text'>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href='profile/publish' class="btn btn-primary">Опубликовать</a>
-                </div>
-            </div>
+            <?php endforeach;?>
         </div>
     </div>
 
