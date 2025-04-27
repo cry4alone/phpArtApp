@@ -7,7 +7,13 @@ class MainController extends Controller {
     }
 
     public function index() {
+        $this->getImages();
+
         $this->pageData['title'] = 'Главная';
         $this->view->renderLayout($this->pageTpl, $this->pageData);
+    }
+
+    public function getImages() {
+        $this->pageData['images'] = $this->model->getImages();
     }
 }

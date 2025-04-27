@@ -9,6 +9,7 @@ Class ProfileController extends Controller {
     public function index() {
 
         $this->checkCookie();
+        $this->getUserImages();
 
         $this->pageData['title'] = 'Профиль';
         $this->pageData['login'] = $_SESSION['login'];
@@ -43,5 +44,15 @@ Class ProfileController extends Controller {
         $filename = uniqid() . "." . $file_extension;
 
         move_uploaded_file($_FILES['file']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . "/public/images/uploads/" . $filename);
+
+        $title = $_POST['title'];
+        $description = $_POST['description'];
+
+        $this->model->addImage($filename, $title, $description);
+        $this->getUserImages();
+    }
+
+    public function getUserImages() {
+        $this->pageData['images'] = $this->model->getUserImages();
     }
 }
