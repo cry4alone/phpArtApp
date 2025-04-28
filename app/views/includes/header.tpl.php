@@ -56,3 +56,4 @@
 </body>
 
 </html>
+    <?php include_once(VIEW_PATH . "/includes/checkerror.tpl.php")?>

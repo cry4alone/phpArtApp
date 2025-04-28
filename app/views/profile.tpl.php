@@ -1,6 +1,5 @@
 <body>
     <?php include_once ROOT . "/views/includes/addNewPostModal.php" ?>
-    <?php include_once VIEW_PATH . "/includes/checkerror.tpl.php" ?>
     <div class='container-fluid d-flex flex-column justify-content-center align-items-center'>
         <div class='container-lg d-flex justify-content-between align-items-center mt-3 gap-5'>
             <p class='display-4 mb-0'>Ваш профиль</p>
@@ -27,7 +26,7 @@
         <div class='container-lg d-flex justify-content-center align-items-center mt-3 gap-5'>
             <?php foreach($pageData['images'] as $image):?>
             <div class='card'>
-                <img width='400' height='400' src="<?php echo"./public/images/uploads/" . $image["filename"]?>" class='rounded'>
+                <img width='400' height='400' src="<?php echo"/public/images/uploads/" . $image["filename"]?>" class='rounded'>
                 <div class='card-body'>
                     <h5 class='card-title'><?php echo $image["title"] ?></h5>
                     <p class='card-text'><?php echo $image["description"] ?></p>

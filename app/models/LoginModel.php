@@ -15,6 +15,7 @@ class LoginModel extends Model {
         }
 
         if($user){
+            $_SESSION['password'] = $user['password'];
             $_SESSION['login'] = $user['login'];
             $_SESSION['id'] = $user['id'];
             $_SESSION['email'] = $user['email'];
