@@ -18,6 +18,7 @@ class RegistrationController extends Controller {
             unset( $_SESSION['registration-email']);
             unset( $_SESSION['registration-login']);
             unset( $_SESSION['registration-password']);
+            unset( $_SESSION['registration_form_data']);
             header("Location: /login");
             exit;
         }
@@ -41,22 +42,26 @@ class RegistrationController extends Controller {
                     header("Location: /registration");
                     exit;
                 }
-                else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $_SESSION['error'] = 'Некорректный email';
                     header("Location: /registration");
                     exit;
                 }
-                else if(strlen($password) < 5){
+
+                if(strlen($password) < 5){
                     $_SESSION['error'] = 'Пароль не может быть меньше 5 символов';
                     header("Location: /registration");
                     exit;
                 }
-                else if($this->model->emailIsUse($email)){
+
+                if($this->model->emailIsUse($email)){
                     $_SESSION['error'] = 'Данный email уже используется';
                     header("Location: /registration");
                     exit;
                 }
-                else if($this->model->loginIsUse($login)){
+                
+                if($this->model->loginIsUse($login)){
                     $_SESSION['error'] = 'Данный логин уже используется';
                     header("Location: /registration");
                     exit;
