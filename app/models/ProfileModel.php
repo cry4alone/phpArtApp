@@ -27,4 +27,21 @@ class ProfileModel extends Model {
 
         return $images;
     }
+
+    public function editPost(string $title, string $description, int $id): bool {
+        try {
+            $sql = "UPDATE images SET title = :title, description = :description WHERE id = :id";
+            $stmt = $this->db->prepare($sql);
+            $result = $stmt->execute([
+                'title' => $title,
+                'description' => $description,
+                'id' => $id
+            ]);
+
+            return $result && $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
 }

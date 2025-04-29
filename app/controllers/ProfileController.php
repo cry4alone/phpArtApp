@@ -56,9 +56,26 @@ Class ProfileController extends Controller {
         $this->pageData['images'] = $this->model->getUserImages();
     }
 
-    public function editImage($id) {
-        echo "edit image" . $id;
-    }
+    public function editPost() {
+        if (empty($_POST['title']) || empty($_POST['description']) || empty($_POST['id'])) {
+            $_SESSION['error'] = 'Все поля обязательны для заполнения';
+            header("Location: /profile");
+            exit;
+        }
 
-    
+        $title = trim($_POST['title']);
+        $description = trim($_POST['description']);
+        $id = (int)$_POST['id'];
+
+        $success = $this->model->editPost($title, $description, $id);
+
+        if ($success) {
+            $_SESSION['success'] = 'Изменения сохранены';
+        } else {
+            $_SESSION['error'] = 'Ошибка при сохранении изменений';
+        }
+
+        header("Location: /profile");
+        exit;
+    }
 }
