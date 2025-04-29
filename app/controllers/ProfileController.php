@@ -83,6 +83,20 @@ class ProfileController extends Controller {
         $this->redirect('/profile');
     }
 
+    public function changePostVisibility() {
+        $id = $this->validateId($_POST['id']);
+        try {
+            $success = $this->model->changePostVisibility($id);
+            if (!$success) {
+                throw new Exception('Ошибка при изменении видимости изображния');
+            }
+        } catch (Exception $e) {
+            $_SESSION['error'] = $e->getMessage();
+        }
+
+        $this->redirect('/profile');
+    }
+
     private function checkCookie() {
         if (!isset($_SESSION['login'])) {
             $this->redirect('/login');

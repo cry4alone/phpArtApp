@@ -29,7 +29,7 @@
             </span>
         </div>
 
-        <div class='container-lg mt-3'>
+        <div class='container-lg my-3'>
             <div class="row g-4">
                 <?php foreach ($pageData['images'] as $image): ?>
                     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
@@ -40,7 +40,10 @@
                                 <h5 class='card-title'><?php echo htmlspecialchars($image["title"]); ?></h5>
                                 <p class='card-text'><?php echo htmlspecialchars($image["description"]); ?></p>
                                 <div class='d-flex justify-content-between align-items-center mt-auto'>
-                                    <button type='button' class='btn btn-primary'>Опубликовать</button>
+                                    <form method='post' action='profile/changePostVisibility'>
+                                        <button type='submit' name='id' class='btn btn-primary form-control'>Опубликовать</button>
+                                        <input type='hidden' name='id' value='<?php echo $image["id"]; ?>'>
+                                    </form>
                                     <button data-filename="<?php echo $image['filename']; ?>" data-title="<?php echo $image['title']; ?>"
                                         data-description="<?php echo $image['description']; ?>" data-bs-toggle="modal" data-bs-target="#editPostModal"
                                         data-id="<?php echo $image["id"]; ?>" type='button' class="btn ms-auto editPostBtn">
