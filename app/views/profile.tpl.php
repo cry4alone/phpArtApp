@@ -25,16 +25,18 @@
         </div>
 
         <div class='container-lg d-flex justify-content-center align-items-center mt-3 gap-5'>
-            <?php foreach($pageData['images'] as $image):?>
-            <div class='card'>
-                <img width='400' height='400' src="<?php echo"./public/images/uploads/" . $image["filename"]?>" class='rounded'>
-                <div class='card-body'>
-                    <h5 class='card-title'><?php echo $image["title"] ?></h5>
-                    <p class='card-text'><?php echo $image["description"] ?></p>
-                    <a href='profile/publish' class="btn btn-primary">Опубликовать</a>
+            <?php foreach ($pageData['images'] as $image): ?>
+                <div class='card'>
+                    <img src="<?php echo "/public/images/uploads/" . $image["filename"] ?>" class='rounded'>
+                    <div class='card-body d-flex flex-column'>
+                        <h5 class='card-title'><?php echo $image["title"] ?></h5>
+                        <p class='card-text'><?php echo $image["description"] ?></p>
+                        <a href='/profile/editImage/<?php echo $image["id"] ?>' class="btn ms-auto">
+                            <img src='/public/images/icons/edit.svg' alt='edit'>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <?php endforeach;?>
+            <?php endforeach; ?>
         </div>
     </div>
 

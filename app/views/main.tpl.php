@@ -13,7 +13,6 @@
                     <div class='card-body'>
                         <h5 class='card-title'><?php echo $image["title"] ?></h5>
                         <p class='card-text'><?php echo $image["description"] ?></p>
-                        <a href='profile/publish' class="btn btn-primary">Опубликовать</a>
                     </div>
                 </div>
             <?php endforeach; ?>

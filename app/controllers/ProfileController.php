@@ -55,4 +55,10 @@ Class ProfileController extends Controller {
     public function getUserImages() {
         $this->pageData['images'] = $this->model->getUserImages();
     }
+
+    public function editImage($id) {
+        echo "edit image" . $id;
+    }
+
+    
 }
