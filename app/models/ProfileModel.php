@@ -1,7 +1,7 @@
 <?php
 
 class ProfileModel extends Model {
-    
+
     public function addImage(string $filename, string $title, string $description, int $userId): bool {
         try {
             $sql = "INSERT INTO images (filename, user_id, title, description) 
@@ -49,4 +49,17 @@ class ProfileModel extends Model {
             return false;
         }
     }
+
+    public function deletePost(int $id): bool {
+        try {
+            $sql = "DELETE FROM images WHERE id = :id";
+            $stmt = $this->db->prepare($sql);
+
+            return $stmt->execute(['id' => $id]);
+        } catch (PDOException $e) {
+            error_log("Ошибка при удалении поста: " . $e->getMessage());
+            return false;
+        }
+    }
+    
 }

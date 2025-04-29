@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const modalTitle = document.querySelector("#titleEdit");
     const modalDescription = document.querySelector("#descriptionEdit");
     const modalImage = document.querySelector("#imageEdit");
-    const modalId = document.querySelector("#idEdit");
+    const modalIds = document.querySelectorAll(".idEdit");
 
     const editButtons = document.querySelectorAll(".editPostBtn");
 
@@ -16,10 +16,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const description = button.dataset.description;
             const id = button.dataset.id;
 
-            modalTitle.value = title;
-            modalId.value = id;
             modalDescription.value = description;
-
+            modalTitle.value = title;
+            modalIds.forEach((modalId) => {
+                modalId.value = id;
+            })
         });
     });
 
