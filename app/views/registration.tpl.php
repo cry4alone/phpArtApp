@@ -19,7 +19,12 @@ unset($_SESSION['registration_form_data']);
   <div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
     <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
       <h3 class="text-center mb-4">Регистрация</h3>
-      <form id="registration-form" method="post" action="/registration/checkuser">
+      <form id="registration-form" method="post" action="/registration/checkuser" enctype="multipart/form-data">
+        <div class="d-flex flex-column align-items-center">
+          <img id="profileImage" src="/public/images/icons/upload-photo.svg" alt="Фото профиля" 
+          class="img-fluid rounded-circle mb-3 mt-3" style="width: 150px; height: 150px; cursor: pointer;">
+          <input type="file" id="avatarInput" name="avatar" class="form-control" style="display: none;" accept="image/*">
+        </div>
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
           <input type="email" class="form-control" id="email" name="email"
@@ -45,5 +50,7 @@ unset($_SESSION['registration_form_data']);
       </form>
     </div>
   </div>
+
+  <script src="/public/js/chooseAvatar.js"></script>
 </body>
 </html>
