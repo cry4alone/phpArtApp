@@ -34,18 +34,19 @@ class DB {
         $stmt = $pdo->query("SELECT to_regclass('public.images')");
         $imagesTableExists = $stmt->fetchColumn() !== null;
 
-        if (!$imagesTableExists) {
-            $createImagesTableQuery = "
-                CREATE TABLE images (
-                    id SERIAL PRIMARY KEY,
-                    filename TEXT NOT NULL,
-                    title VARCHAR(50),
-                    description VARCHAR(255),
-                    user_id INTEGER REFERENCES \"User\"(id) ON DELETE CASCADE,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                );
-            ";
-            $pdo->exec($createImagesTableQuery);
+    if (!$imagesTableExists) {
+        $createImagesTableQuery = "
+            CREATE TABLE images (
+                id SERIAL PRIMARY KEY,
+                filename TEXT NOT NULL,
+                title VARCHAR(50),
+                description VARCHAR(255),
+                is_shared BOOLEAN DEFAULT 0,
+                user_id INTEGER REFERENCES \"User\"(id) ON DELETE CASCADE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        ";
+        $pdo->exec($createImagesTableQuery);
 
         }
     }

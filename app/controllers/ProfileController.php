@@ -53,7 +53,7 @@ class ProfileController extends Controller {
 
     public function editPost() {
         try {
-            $id = $this->validateId($_POST['id']);
+            $id = (int)$_POST['id'];
             $title = trim($_POST['title']);
             $description = trim($_POST['description']);
 
@@ -65,6 +65,37 @@ class ProfileController extends Controller {
             }
 
             $_SESSION['success'] = 'Изменения сохранены';
+        } catch (Exception $e) {
+            $_SESSION['error'] = $e->getMessage();
+        }
+
+        $this->redirect('/profile');
+    }
+
+    public function deletePost() {
+        $id = $this->validateId($_POST['id']);
+        try {
+            $success = $this->model->deletePost($id);
+            
+            if (!$success) {
+                throw new Exception('Ошибка при удалении изображения');
+            }
+
+            $_SESSION['success'] = 'Пост успешно удален';
+        } catch (Exception $e) {
+            $_SESSION['error'] = $e->getMessage();
+        }
+
+        $this->redirect('/profile');
+    }
+
+    public function changePostVisibility() {
+        $id = $this->validateId($_POST['id']);
+        try {
+            $success = $this->model->changePostVisibility($id);
+            if (!$success) {
+                throw new Exception('Ошибка при изменении видимости изображния');
+            }
         } catch (Exception $e) {
             $_SESSION['error'] = $e->getMessage();
         }
