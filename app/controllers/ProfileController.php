@@ -111,6 +111,7 @@ class ProfileController extends Controller {
     }
 
     private function clearSession() {
+        unset($_SESSION['id']);
         unset($_SESSION['login']);
         unset($_SESSION['email']);
     }
