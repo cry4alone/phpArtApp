@@ -10,6 +10,12 @@ class ProfileController extends Controller {
     }
 
     public function index() {
+        $user = $this->model->getUser($_SESSION['login']);
+        $this->pageData['pathToAvatar'] =  "/public/images/icons/person-circle.svg";
+        if(!empty($user) && !empty($user['pathtoavatar'])) {
+            $this->pageData['pathToAvatar'] = $user['pathtoavatar'];
+        }
+        
         $this->checkCookie();
         $this->preparePageData();
         $this->view->renderLayout($this->pageTpl, $this->pageData);

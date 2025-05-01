@@ -8,8 +8,12 @@ class ChangeprofileController extends Controller {
         $this->view = new View();
     }
     public function index() {
+        $user = $this->model->getUser($_SESSION['login']);
+        $this->pageData['pathToAvatar'] =  "/public/images/icons/person-circle.svg";
+        if(!empty($user) && !empty($user['pathtoavatar'])) {
+            $this->pageData['pathToAvatar'] = $user['pathtoavatar'];
+        }
         $this->checkCookie();
-        print_r($_SESSION);
         $this->pageData['title'] = "Редактирование профиля";
         $this->view->renderLayout($this->pageTpl, $this->pageData);
     }
@@ -27,56 +31,91 @@ class ChangeprofileController extends Controller {
         exit;
     }
     public function checkolddata() {
-        if(!empty($_POST) && !empty($_POST['email']) && !empty($_POST['login'])){
-            $postEmail = $_POST['email'];
-            $postLogin = $_POST['login'];
-            $_SESSION['changeProfileFormData'] = $_POST;
-            $_SESSION['changeProfileDataIsCorrect'] = true;
-            $dataIsChanged = false;
+        if(!empty($_POST)){
+            if(isset($_FILES['avatar']) && $_FILES['avatar']['error'] !== UPLOAD_ERR_NO_FILE){
+                $avatar = $_FILES['avatar'];
 
-            if($postEmail != $_SESSION['email']){
-                if (!filter_var($postEmail, FILTER_VALIDATE_EMAIL)) {
-                    $_SESSION['changeProfileDataIsCorrect'] = false;
-                    $_SESSION['error'] = 'Некорректный email';
+                if ($avatar['error'] !== UPLOAD_ERR_OK) {
+                    throw new Exception('Ошибка загрузки файла');
+                }
+
+                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . "/public/images/uploads/avatars/";
+                $fileName = uniqid('avatar_', true) . '.' . pathinfo($avatar['name'], PATHINFO_EXTENSION);
+                $fullFilePath = $uploadDir . $fileName;
+
+                if (!move_uploaded_file($avatar['tmp_name'], $fullFilePath)) {
+                    $_SESSION['error'] = 'Не удалось загрузить аватар';
+                }
+
+                $user = $this->model->getUser($_SESSION['login']);
+                if(!empty($user) && !empty($user['pathtoavatar'])) {
+                    $pathToOldAvatar = $_SERVER['DOCUMENT_ROOT'] . $user['pathtoavatar'];
+                    if (file_exists($pathToOldAvatar)) {
+                        if (!unlink($pathToOldAvatar)) {
+                            throw new Exception("Не удалось удалить старый аватар.");
+                        }
+                    }
+                }
+
+                $newAvatarPath = "/public/images/uploads/avatars/" . $fileName;
+                if(!$this->model->updatePathToVatar($_SESSION['login'], $newAvatarPath)){
+                    $_SESSION['error'] = 'Не удалось обновить фото';
                     header("Location: /profile/changeprofile");
                     exit;
                 }
-                else if($this->model->emailIsUse($postEmail)){
-                    $_SESSION['changeProfileDataIsCorrect'] = false;
-                    $_SESSION['error'] = 'Данный email уже используется';
-                    header("Location: /profile/changeprofile");
-                    exit;
-                }
-
-                $dataIsChanged = true;
             }
 
-            if($postLogin != $_SESSION['login']){
-                $dataIsChanged = true;
-            }
-
-            if(!empty($_POST['newPassword'])){
-                $newPassword = $_POST['newPassword'];
-                $confirmPassword = $_POST['confirmPassword'];
-
-                if($newPassword != $confirmPassword) {
-                    $_SESSION['changeProfileDataIsCorrect'] = false;
-                    $_SESSION['error'] = 'Пароли не совпадают';
-                    header("Location: /profile/changeprofile");
-                    exit;
+            if(!empty($_POST['email']) && !empty($_POST['login'])){
+                $postEmail = $_POST['email'];
+                $postLogin = $_POST['login'];
+                $_SESSION['changeProfileFormData'] = $_POST;
+                $_SESSION['changeProfileDataIsCorrect'] = true;
+                $dataIsChanged = false;
+    
+                if($postEmail != $_SESSION['email']){
+                    if (!filter_var($postEmail, FILTER_VALIDATE_EMAIL)) {
+                        $_SESSION['changeProfileDataIsCorrect'] = false;
+                        $_SESSION['error'] = 'Некорректный email';
+                        header("Location: /profile/changeprofile");
+                        exit;
+                    }
+                    else if($this->model->emailIsUse($postEmail)){
+                        $_SESSION['changeProfileDataIsCorrect'] = false;
+                        $_SESSION['error'] = 'Данный email уже используется';
+                        header("Location: /profile/changeprofile");
+                        exit;
+                    }
+    
+                    $dataIsChanged = true;
                 }
-
-                if(strlen($newPassword) < 5){
-                    $_SESSION['changeProfileDataIsCorrect'] = false;
-                    $_SESSION['error'] = 'Пароль не может быть меньше 5 символов';
-                    header("Location: /profile/changeprofile");
-                    exit;
+    
+                if($postLogin != $_SESSION['login']){
+                    $dataIsChanged = true;
                 }
-                $dataIsChanged = true;
-            }
-
-            if($dataIsChanged && $_SESSION['changeProfileDataIsCorrect'] === true){
-                $_SESSION['awaitingOldPassword'] = true;
+    
+                if(!empty($_POST['newPassword'])){
+                    $newPassword = $_POST['newPassword'];
+                    $confirmPassword = $_POST['confirmPassword'];
+    
+                    if($newPassword != $confirmPassword) {
+                        $_SESSION['changeProfileDataIsCorrect'] = false;
+                        $_SESSION['error'] = 'Пароли не совпадают';
+                        header("Location: /profile/changeprofile");
+                        exit;
+                    }
+    
+                    if(strlen($newPassword) < 5){
+                        $_SESSION['changeProfileDataIsCorrect'] = false;
+                        $_SESSION['error'] = 'Пароль не может быть меньше 5 символов';
+                        header("Location: /profile/changeprofile");
+                        exit;
+                    }
+                    $dataIsChanged = true;
+                }
+    
+                if($dataIsChanged && $_SESSION['changeProfileDataIsCorrect'] === true){
+                    $_SESSION['awaitingOldPassword'] = true;
+                }
             }
         }
         header("Location: /profile/changeprofile");

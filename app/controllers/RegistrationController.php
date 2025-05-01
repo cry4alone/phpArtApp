@@ -8,24 +8,40 @@ class RegistrationController extends Controller {
     }
 
     public function index() {
-        if(isset($_SESSION['isUserVerify']) && $_SESSION['isUserVerify'] === true){
+        if (isset($_SESSION['isUserVerify']) && $_SESSION['isUserVerify'] === true) {
             $email = $_SESSION["registration-email"];
             $login = $_SESSION["registration-login"];
             $password = $_SESSION["registration-password"];
-            $this->model->addNewUser($email, $login, $password);
+    
+            $avatarPath = null;
+    
+            if (!empty($_SESSION["tempPathToAvatar"])) {
+                $filename = basename($_SESSION["tempPathToAvatar"]);
+                $avatarsDir = $_SERVER['DOCUMENT_ROOT'] . "/public/images/uploads/avatars/" . $filename;
+    
+                if (rename($_SESSION["tempPathToAvatar"], $avatarsDir)) {
+                    $avatarPath = "/public/images/uploads/avatars/" . $filename;
+                }
+            }
+    
+            $this->model->addNewUser($email, $login, $password, $avatarPath);
+    
             unset($_SESSION['isUserVerify']);
-            unset( $_SESSION['verifyCode']);
-            unset( $_SESSION['registration-email']);
-            unset( $_SESSION['registration-login']);
-            unset( $_SESSION['registration-password']);
-            unset( $_SESSION['registration_form_data']);
+            unset($_SESSION['verifyCode']);
+            unset($_SESSION['registration-email']);
+            unset($_SESSION['registration-login']);
+            unset($_SESSION['registration-password']);
+            unset($_SESSION['registration_form_data']);
+            unset($_SESSION["tempPathToAvatar"]);
+    
             header("Location: /login");
             exit;
         }
-
+    
         $this->pageData['title'] = 'Регистрация';
         $this->view->render($this->pageTpl, $this->pageData);
     }
+    
 
     public function checkuser() {
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -67,6 +83,23 @@ class RegistrationController extends Controller {
                     exit;
                 }
                 else{
+                    if(isset($_FILES['avatar']) && $_FILES['avatar']['error'] !== UPLOAD_ERR_NO_FILE){
+                        $avatar = $_FILES['avatar'];
+
+                        if ($avatar['error'] !== UPLOAD_ERR_OK) {
+                            throw new Exception('Ошибка загрузки файла');
+                        }
+
+                        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . "/public/images/uploads/tmp/";
+                        $filePath = $uploadDir . uniqid('avatar_', true) . '.' . pathinfo($avatar['name'], PATHINFO_EXTENSION);
+
+                        if (!move_uploaded_file($avatar['tmp_name'], $filePath)) {
+                            $_SESSION['error'] = 'Не удалось загрузить аватар';
+                        }
+
+                        $_SESSION["tempPathToAvatar"] = $filePath;
+                    }
+
                     $_SESSION["registration-email"] = $email;
                     $_SESSION["registration-login"] = $login;
                     $_SESSION["registration-password"] = password_hash($password, PASSWORD_DEFAULT);

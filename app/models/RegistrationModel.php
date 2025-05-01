@@ -14,23 +14,20 @@ class RegistrationModel extends Model {
         }
     }
     
-    public function addNewUser($email, $login, $password) {
+    public function addNewUser($email, $login, $password, $pathToAvatar = null) {
         $insertDataQuery = "
-        INSERT INTO \"User\" (email, login, password) 
-        VALUES (:email, :login, :password);
+        INSERT INTO \"User\" (email, login, password, pathToAvatar) 
+        VALUES (:email, :login, :password, :pathToAvatar);
     ";
     
     $stmt = $this->db->prepare($insertDataQuery);
     $success = $stmt->execute([
         'email' => $email,
         'login' => $login,
-        'password' => $password
+        'password' => $password,
+        'pathToAvatar' => $pathToAvatar
     ]);
         
-        if ($success) {
-            return true;
-        } else {
-            return false;
-        }
+        return $success;
     }
 }

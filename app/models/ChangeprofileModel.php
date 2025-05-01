@@ -43,4 +43,21 @@ class ChangeprofileModel extends Model {
             return false;
         }
     }
+
+    public function updatePathToVatar($login, $newPathToVatar) {
+        $sql = "UPDATE \"User\"
+                SET pathtoavatar = :newPathToVatar
+                WHERE login = :login
+                RETURNING 1;";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'login' => $login,
+            'newPathToVatar' => $newPathToVatar
+        ]);
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
 }

@@ -19,4 +19,18 @@ class Model {
             return false;
         }
     }
+
+    public function getUser($login) {
+        $sql = "SELECT * FROM public.\"User\"
+                WHERE login = :login";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'login' => $login,
+        ]);
+
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $user;
+    }
 }

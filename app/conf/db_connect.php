@@ -15,7 +15,8 @@ class DB {
                     id SERIAL PRIMARY KEY,
                     email VARCHAR(100) NOT NULL,
                     login VARCHAR(100) NOT NULL,
-                    password VARCHAR(100) NOT NULL
+                    password VARCHAR(100) NOT NULL,
+                    pathtoavatar VARCHAR(100)
                 );
             ";
             $pdo->exec($createTableQuery);
@@ -30,8 +31,8 @@ class DB {
         }
 
         // Проверка существования таблицы "images"
-    $stmt = $pdo->query("SELECT to_regclass('public.images')");
-    $imagesTableExists = $stmt->fetchColumn() !== null;
+        $stmt = $pdo->query("SELECT to_regclass('public.images')");
+        $imagesTableExists = $stmt->fetchColumn() !== null;
 
     if (!$imagesTableExists) {
         $createImagesTableQuery = "
@@ -47,7 +48,7 @@ class DB {
         ";
         $pdo->exec($createImagesTableQuery);
 
-    }
+        }
     }
 
     public static function connectToDB() {

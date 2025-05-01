@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 
 if [ ! -d /var/www/html/public/images/uploads ]; then
     mkdir -p /var/www/html/public/images/uploads
