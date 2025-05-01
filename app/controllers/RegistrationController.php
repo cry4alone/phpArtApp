@@ -14,13 +14,19 @@ class RegistrationController extends Controller {
             $password = $_SESSION["registration-password"];
     
             $avatarPath = null;
-    
+
             if (!empty($_SESSION["tempPathToAvatar"])) {
                 $filename = basename($_SESSION["tempPathToAvatar"]);
-                $avatarsDir = $_SERVER['DOCUMENT_ROOT'] . "/public/images/uploads/avatars/" . $filename;
-    
-                if (rename($_SESSION["tempPathToAvatar"], $avatarsDir)) {
+                $fullAvatarsDir = $_SERVER['DOCUMENT_ROOT'] . "/public/images/uploads/avatars/";
+
+                if (!is_dir($fullAvatarsDir)) {
+                    mkdir($fullAvatarsDir, 0775, true);
+                }
+
+                $fullAvatarsPath = $fullAvatarsDir . $filename;
+                if (rename($_SESSION["tempPathToAvatar"], $fullAvatarsPath)) {
                     $avatarPath = "/public/images/uploads/avatars/" . $filename;
+                    $_SESSION['pathToAvatar'] = $avatarPath;
                 }
             }
     
@@ -92,6 +98,10 @@ class RegistrationController extends Controller {
 
                         $uploadDir = $_SERVER['DOCUMENT_ROOT'] . "/public/images/uploads/tmp/";
                         $filePath = $uploadDir . uniqid('avatar_', true) . '.' . pathinfo($avatar['name'], PATHINFO_EXTENSION);
+
+                        if (!is_dir($uploadDir)) {
+                            mkdir($uploadDir, 0775, true);
+                        }
 
                         if (!move_uploaded_file($avatar['tmp_name'], $filePath)) {
                             $_SESSION['error'] = 'Не удалось загрузить аватар';
