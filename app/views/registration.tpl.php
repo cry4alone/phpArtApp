@@ -47,6 +47,9 @@ unset($_SESSION['registration_form_data']);
         <div class="d-grid mb-3">
           <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
         </div>
+        <div class="d-flex justify-content-end mb-2 me-1">
+          <a href="/login" style="text-decoration: underline; text-underline-offset: 3px;">Назад</a>
+        </div>
       </form>
     </div>
   </div>

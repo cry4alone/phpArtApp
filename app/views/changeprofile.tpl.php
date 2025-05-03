@@ -1,6 +1,11 @@
 <body>
     <div class="container d-flex flex-column" style="min-height: 80vh;">
-        <h1 class="display-4 text-start mt-5">Редактировать профиль</h1>
+        <div class="d-flex align-items-center justify-content-between mt-5 px-2 px-sm-3 px-md-4">
+            <h1 class="display-4 text-start mb-0">Редактировать профиль</h1>
+            <a href="/profile" class="mt-2 me-4 me-sm-5">
+                <img src="/public/images/assets/back-arrow.png" alt="Назад" height="50px">
+            </a>
+        </div>
         <form id="editProfileForm" action="/profile/changeprofile/checkolddata" method="POST" enctype="multipart/form-data">
             <div class="d-flex flex-column align-items-center mt-5">
                 <div class="d-flex flex-column align-items-center col-12 col-md-3 text-center">

@@ -21,6 +21,7 @@ class ChangeprofileController extends Controller {
 
     private function checkCookie() {
         if (!isset($_SESSION['login'])) {
+            $_SESSION['redirectAfterLogin'] = $_SERVER['REQUEST_URI'];
             header('Location: /login');
             exit;
         }
