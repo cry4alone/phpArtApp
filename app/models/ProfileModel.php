@@ -79,4 +79,16 @@ class ProfileModel extends Model
             return false;
         }
     }
+
+    public function getImageNameAndOwner(int $id): array{
+        try {
+            $sql = "SELECT filename, user_id FROM images WHERE id = :id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute(['id' => $id]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo("Ошибка при получении имени изображения: " . $e->getMessage());
+            return [];
+        }
+    }
 }

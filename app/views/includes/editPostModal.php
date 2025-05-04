@@ -21,8 +21,14 @@
             <div class="modal-footer">
                 <form action='profile/deletePost' method='post' id='deletePostForm'>
                     <input type="hidden" name="id" class="idEdit">
-                    <button type='submit' class='btn me-auto form-control' form='deletePostForm'>
-                        <img src='/public/images/icons/trash.svg' alt='delete' class='w-100 h-100'>
+                    <button type='submit' class='btn border border-secondary bg-light' form='deletePostForm'>
+                        <img src='/public/images/icons/trash.svg' alt='delete' width="20" height="20">
+                    </button>
+                </form>
+                <form action='profile/addWatermark' method='post' id='addWatermarkForm'>
+                    <input type="hidden" name="id" class="idEdit">
+                    <button type='submit' class='btn border border-secondary bg-light' form='addWatermarkForm'>
+                        <img src='/public/images/icons/watermark.svg' alt='add watermark' width="20" height="20">
                     </button>
                 </form>
                 <div>
