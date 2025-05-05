@@ -41,7 +41,7 @@ class DB {
                 filename TEXT NOT NULL,
                 title VARCHAR(50),
                 description VARCHAR(255),
-                is_shared BOOLEAN DEFAULT 0,
+                is_shared BOOLEAN DEFAULT FALSE,
                 user_id INTEGER REFERENCES \"User\"(id) ON DELETE CASCADE,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
