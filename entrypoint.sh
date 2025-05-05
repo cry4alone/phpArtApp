@@ -12,5 +12,6 @@ chmod -R 775 /var/www/html/public/images/uploads
 composer install
 php /var/www/html/app/conf/init_db.php
 a2enmod rewrite
+a2enmod headers
 
 exec apache2-foreground

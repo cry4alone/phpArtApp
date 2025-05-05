@@ -8,18 +8,20 @@ class ChangeprofileController extends Controller {
         $this->view = new View();
     }
     public function index() {
-        $user = $this->model->getUser($_SESSION['login']);
-        $this->pageData['pathToAvatar'] =  "/public/images/icons/person-circle.svg";
-        if(!empty($user) && !empty($user['pathtoavatar'])) {
-            $this->pageData['pathToAvatar'] = $user['pathtoavatar'];
-        }
         $this->checkCookie();
+
+        $this->pageData['pathToAvatar'] =  "/public/images/icons/person-circle.svg";
+        if(!empty($_SESSION['pathToAvatar'])) {
+            $this->pageData['pathToAvatar'] = $_SESSION['pathToAvatar'];
+        }
+
         $this->pageData['title'] = "Редактирование профиля";
         $this->view->renderLayout($this->pageTpl, $this->pageData);
     }
 
     private function checkCookie() {
         if (!isset($_SESSION['login'])) {
+            $_SESSION['redirectAfterLogin'] = $_SERVER['REQUEST_URI'];
             header('Location: /login');
             exit;
         }
@@ -47,9 +49,8 @@ class ChangeprofileController extends Controller {
                     $_SESSION['error'] = 'Не удалось загрузить аватар';
                 }
 
-                $user = $this->model->getUser($_SESSION['login']);
-                if(!empty($user) && !empty($user['pathtoavatar'])) {
-                    $pathToOldAvatar = $_SERVER['DOCUMENT_ROOT'] . $user['pathtoavatar'];
+                if(!empty($_SESSION['pathToAvatar'])) {
+                    $pathToOldAvatar = $_SERVER['DOCUMENT_ROOT'] . $_SESSION['pathToAvatar'];
                     if (file_exists($pathToOldAvatar)) {
                         if (!unlink($pathToOldAvatar)) {
                             throw new Exception("Не удалось удалить старый аватар.");
@@ -63,6 +64,7 @@ class ChangeprofileController extends Controller {
                     header("Location: /profile/changeprofile");
                     exit;
                 }
+                $_SESSION['pathToAvatar'] = $newAvatarPath;
             }
 
             if(!empty($_POST['email']) && !empty($_POST['login'])){

@@ -11,6 +11,8 @@
 <body class="bg-light">
   <div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
     <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
+
+
       <h3 class="text-center mb-4">Вход</h3>
       <form method="post" action="login/checklogin">
         <div class="mb-3">
@@ -24,10 +26,15 @@
         <div class="d-grid mb-3">
           <button type="submit" class="btn btn-primary">Войти</button>
         </div>
-        <div class="d-flex justify-content-between">
-          <a href="/passwordrecovery" >Забыли пароль?</a>
-          <a href="/registration" >Регистрация</a>
-        </div>
+          <div class="d-flex justify-content-between mb-2">
+            <div class="d-flex flex-column ms-1">
+              <a href="/passwordrecovery">Забыли пароль?</a>
+              <a href="/registration">Регистрация</a>
+            </div>
+            <div class="me-1">            
+              <a href="/main">На главную</a>
+            </div>
+         </div>
       </form>
     </div>
   </div>

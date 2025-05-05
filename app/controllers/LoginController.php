@@ -17,8 +17,15 @@ class LoginController extends Controller {
             $password = $_POST['password'];
 
             if($this->model->checklogin($login, $password)){
-                header("Location: /main");
-                exit;
+                if (isset($_SESSION['redirectAfterLogin'])) {
+                    $redirect = $_SESSION['redirectAfterLogin'];
+                    unset($_SESSION['redirectAfterLogin']);
+                    header("Location: $redirect");
+                    exit;
+                } else {
+                    header("Location: /main");
+                    exit;
+                }
             }
             else{
                 $_SESSION['error'] = 'Неверный логин или пароль';

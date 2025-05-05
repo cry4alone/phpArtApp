@@ -11,11 +11,9 @@ class ProfileController extends Controller {
 
     public function index() {
         $this->checkCookie();
-        
-        $user = $this->model->getUser($_SESSION['login']);
         $this->pageData['pathToAvatar'] =  "/public/images/icons/person-circle.svg";
-        if(!empty($user) && !empty($user['pathtoavatar'])) {
-            $this->pageData['pathToAvatar'] = $user['pathtoavatar'];
+        if(!empty($_SESSION['pathToAvatar'])) {
+            $this->pageData['pathToAvatar'] = $_SESSION['pathToAvatar'];
         }
         
         $this->preparePageData();
@@ -90,6 +88,29 @@ class ProfileController extends Controller {
         $this->redirect('/profile');
     }
 
+    public function addWatermark() {
+        $id = $this->validateId($_POST['id']);
+        try {
+            $result = $this->model->getImageNameAndOwner($id);
+            if (!$result) {
+                throw new Exception('Ошибка при получении названия изображения.');
+            }
+
+            if (!isset($_SESSION['id']) || $result['user_id'] !== $_SESSION['id']) {
+                throw new Exception('Ошибка доступа.');
+            }
+
+            $filename = $result['filename'];
+            $this->addWatermarkToImage($filename);
+            $_SESSION['success'] = 'Водяной знак успешно добавлен.';
+
+        } catch (Exception $e) {
+            $_SESSION['error'] = $e->getMessage();
+        }
+
+        $this->redirect('/profile');
+    }
+
     public function changePostVisibility() {
         $id = $this->validateId($_POST['id']);
         try {
@@ -104,8 +125,106 @@ class ProfileController extends Controller {
         $this->redirect('/profile');
     }
 
+    private function getTextDimensions($text, $fontSize, $fontPath): array {
+        $box = imagettfbbox($fontSize, 0, $fontPath, $text);
+        return [
+            'width' => $box[2] - $box[0],
+            'height' => $box[1] - $box[7],
+            'aboveBaseline' => abs($box[7]),
+        ];
+    }
+
+    private function getMaxTextWidth($lines, $fontSize, $fontPath): int {
+        $width = [];
+        foreach ($lines as $line) {
+            $box = imagettfbbox($fontSize, 0, $fontPath, $line);
+            array_push($width, $box[2] - $box[0]);
+        }
+        return max($width);
+    }
+    private function addMultipleLineText($image, $lines, $padding, $lineSpacing){
+        $lines = array_reverse($lines);
+        $fontPath = $_SERVER['DOCUMENT_ROOT'] . "/public/font/Montserrat-SemiBoldItalic.ttf";
+        $grey = imagecolorallocatealpha($image, 4, 41, 60, 10);
+        $imageWidth = imagesx($image);
+        $imageHeight = imagesy($image);
+
+        $fontSize = max(12, intval($imageHeight / 20));
+        $maxTextWidth = $this->getMaxTextWidth($lines, $fontSize, $fontPath);
+        $textX = $imageWidth - $maxTextWidth - $padding;
+        $textY = $imageHeight - $padding;
+
+        $currentTextHeight = null;
+        foreach ($lines as $line) {
+            imagettftext($image, $fontSize, 0, $textX, $textY, $grey, $fontPath, $line);
+            $box = imagettfbbox($fontSize, 0, $fontPath, $line);
+            $currentTextHeight = $box[1] - $box[7];
+            $textY -= ($currentTextHeight + $lineSpacing);
+        }
+
+        $dimentions = [$textX, $imageHeight - $padding, $maxTextWidth, ($imageHeight - $padding) - ($textY+$lineSpacing)];
+        return $dimentions;
+    }
+
+    private function addWatermarkToImage($filename) {
+        $sourceImagePath = $_SERVER['DOCUMENT_ROOT'] . "/public/images/uploads/$filename";
+
+        $login = $_SESSION['login'];
+        $watermarkLines = ["Pixels", "$login"];
+
+        $ext = pathinfo($sourceImagePath, PATHINFO_EXTENSION);
+        $image = null;
+        if ($ext == 'jpg' || $ext == 'jpeg') {
+            $image = imagecreatefromjpeg($sourceImagePath);
+        } elseif ($ext == 'png') {
+            $image = imagecreatefrompng($sourceImagePath);
+        } else {
+            throw new Exception("Неподдерживаемый формат изображения.");
+        }
+        $imageHeight = imagesy($image);
+        $padding = intval($imageHeight / 25);
+        $lineSpacing = intval($padding / 3);
+
+        $textDimentions = $this->addMultipleLineText($image, $watermarkLines, $padding, $lineSpacing);
+        $bottomLeftTextX = $textDimentions[0];
+        $bottomLeftTextY = $textDimentions[1];
+        $textHeight = $textDimentions[3];
+    
+
+        $logoPath = $_SERVER['DOCUMENT_ROOT'] . "/public/images/assets/logo_no_padding.png";
+        $logo = @imagecreatefrompng($logoPath);
+        $logoOrigWidth = imagesx($logo);
+        $logoOrigHeight = imagesy($logo);
+
+        $newLogoWidth = $textHeight;
+        $newLogoHeight = $textHeight;
+
+        $resizedLogo = imagecreatetruecolor($textHeight, $textHeight);
+        imagealphablending($resizedLogo, false);
+        imagesavealpha($resizedLogo, true);
+        imagecopyresampled(
+            $resizedLogo, $logo,
+            0, 0, 0, 0,
+            $newLogoWidth, $newLogoHeight,
+            $logoOrigWidth, $logoOrigHeight
+        );
+
+        $logoPadding = intval($padding / 2);
+        $logoX = $bottomLeftTextX - $newLogoWidth -  $logoPadding ;
+        $logoY = $bottomLeftTextY - $newLogoHeight;
+
+        imagecopy($image, $resizedLogo, $logoX, $logoY, 0, 0, $newLogoWidth, $newLogoHeight);
+
+        imagejpeg($image, $sourceImagePath, 90);
+
+        imagedestroy($image);
+        imagedestroy($logo);
+        imagedestroy($resizedLogo);
+    }
+
     private function checkCookie() {
         if (!isset($_SESSION['login'])) {
+            $_SESSION['redirectAfterLogin'] = $_SERVER['REQUEST_URI'];
             $this->redirect('/login');
         }
     }

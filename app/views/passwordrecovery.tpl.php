@@ -33,8 +33,11 @@ unset($_SESSION['password_recovery_form_data']);
           <label for="password-retry" class="form-label">Повтор пароля</label>
           <input type="password" class="form-control" id="password-retry" name="password-retry" placeholder="Повторите пароль" required>
         </div>
-        <div class="d-grid mb-2">
+        <div class="d-grid mb-3">
           <button type="submit" class="btn btn-primary">Отправить код</button>
+        </div>
+        <div class="d-flex justify-content-end mb-2 me-1">
+          <a href="/login" style="text-decoration: underline; text-underline-offset: 3px;">Назад</a>
         </div>
       </form>
     </div>
