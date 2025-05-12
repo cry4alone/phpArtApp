@@ -3,7 +3,7 @@ class MainModel extends Model {
     public function getImages($createdBy, $date, $search, $page, $perPage) {
         $baseSql = "FROM images
                     LEFT JOIN \"User\" as u ON images.user_id = u.id
-                    WHERE 1=1";
+                    WHERE is_shared = true";
         $params = [];
     
         if ($createdBy) {

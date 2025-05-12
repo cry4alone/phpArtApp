@@ -2,7 +2,7 @@
 
 class ProfileController extends Controller {
     private $pageTpl = '/views/profile.tpl.php';
-    private $allowedFileTypes = ["jpg", "png"];
+    private $allowedFileTypes = ["jpg", "jpeg", "png"];
 
     public function __construct() {
         $this->model = new ProfileModel();

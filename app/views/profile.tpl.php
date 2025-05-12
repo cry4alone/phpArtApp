@@ -44,7 +44,15 @@
                                 <p class='card-text'><?php echo htmlspecialchars($image["description"]); ?></p>
                                 <div class='d-flex justify-content-between align-items-center mt-auto'>
                                     <form method='post' action='profile/changePostVisibility'>
-                                        <button type='submit' name='id' class='btn btn-primary form-control'>Опубликовать</button>
+                                        <?php 
+                                            $publicationButtonMessage = 'Опубликовать';
+                                            $buttonStyle = 'btn-primary';
+                                            if ($image['is_shared']) {
+                                                $publicationButtonMessage = 'Скрыть';
+                                                $buttonStyle = 'btn-secondary';
+                                            }
+                                        ?>
+                                        <button type='submit' name='id' class='btn <?=$buttonStyle?> form-control' style="min-width: 130px;"><?=$publicationButtonMessage?></button>
                                         <input type='hidden' name='id' value='<?php echo $image["id"]; ?>'>
                                     </form>
                                     <button data-filename="<?php echo $image['filename']; ?>" data-title="<?php echo $image['title']; ?>"
