@@ -13,12 +13,13 @@ use PHPMailer\PHPMailer\Exception;
     function sendVerifyCode($email) {
         $mail = new PHPMailer(true);
         $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com';
-        $mail->SMTPAuth   = true;
-        $mail->Username   = 'pixelgallery777@gmail.com';
-        $mail->Password   = 'qqbn sffy mdsf wbls';
+        $mail->CharSet = 'UTF-8';
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'pixelgallery777@gmail.com';
+        $mail->Password = 'qqbn sffy mdsf wbls';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = 587;
+        $mail->Port = 587;
 
         $mail->setFrom('pixelgallery777@gmail.com');
         $mail->addAddress($email);
