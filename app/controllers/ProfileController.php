@@ -230,10 +230,19 @@ class ProfileController extends Controller {
     }
 
     private function preparePageData() {
+        $search = $_GET['search'] ?? null;
+        $currentPage = (int)($_GET['page'] ?? 1);
+        $perPage = 12;
+        $this->pageData['queryParams'] = $_GET;
+        $this->pageData['currentPage'] = $currentPage;
+        $this->pageData['search'] = $search;
         $this->pageData['title'] = 'Профиль';
         $this->pageData['login'] = $_SESSION['login'];
         $this->pageData['email'] = $_SESSION['email'];
-        $this->pageData['images'] = $this->model->getUserImages($this->getUserId());
+        $result = $this->model->getUserImages($this->getUserId(), $search, $currentPage, $perPage);
+        $this->pageData['images'] = $result['images'];
+        $this->pageData['lastPage'] = $result['lastPage'];
+        $this->pageData['basePage'] = '/profile';
     }
 
     private function clearSession() {

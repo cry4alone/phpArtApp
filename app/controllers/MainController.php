@@ -10,18 +10,19 @@ class MainController extends Controller {
         $createdBy = $_GET['createdBy'] ?? null;
         $date = $_GET['date'] ?? null;
         $search = $_GET['search'] ?? null;
-        $this->getImages($createdBy, $date, $search);
+        $currentPage = (int)($_GET['page'] ?? 1);
+        $perPage = 12;
+        $result = $this->model->getImages($createdBy, $date, $search, $currentPage, $perPage);
+        $this->pageData['images'] = $result['images'];
+        $this->pageData['lastPage'] = $result['lastPage'];
 
-        $this->pageData['title'] = 'Главная';
+        $this->pageData['title'] = 'Pixels';
+        $this->pageData['queryParams'] = $_GET;
+        $this->pageData['currentPage'] = $currentPage;
         $this->pageData['createdBy'] = $createdBy;
         $this->pageData['date'] = $date;
         $this->pageData['search'] = $search;
+        $this->pageData['basePage'] = '/main';
         $this->view->renderLayout($this->pageTpl, $this->pageData);
-    }
-
-    public function getImages($createdBy, $date, $search) {
-
-
-        $this->pageData['images'] = $this->model->getImages($createdBy, $date, $search);
     }
 }

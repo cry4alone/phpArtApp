@@ -1,29 +1,45 @@
 <?php
 class MainModel extends Model {
-    public function getImages($createdBy, $date, $search) {
-        $sql = "SELECT images.*, u.login
-                FROM images
-                LEFT JOIN \"User\" as u ON images.user_id = u.id
-                WHERE 1=1";
+    public function getImages($createdBy, $date, $search, $page, $perPage) {
+        $baseSql = "FROM images
+                    LEFT JOIN \"User\" as u ON images.user_id = u.id
+                    WHERE 1=1";
         $params = [];
-
+    
         if ($createdBy) {
-            $sql .= " AND login = :createdBy";
+            $baseSql .= " AND login = :createdBy";
             $params["createdBy"] = $createdBy;
         }
         if ($date) {
-            $sql .= " AND DATE(created_at) = :date";
+            $baseSql .= " AND DATE(created_at) = :date";
             $params["date"] = $date;
         }
         if ($search) {
-            $sql .= " AND (title ILIKE :search OR description ILIKE :search)";
+            $baseSql .= " AND (title ILIKE :search OR description ILIKE :search)";
             $params["search"] = "%" . $search . "%";
         }
 
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute($params);
-        $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $countSql = "SELECT COUNT(*) " . $baseSql;
+        $countStmt = $this->db->prepare($countSql);
+        $countStmt->execute($params);
+        $totalItems = (int) $countStmt->fetchColumn();
 
-        return $images;
+        $dataSql = "SELECT images.*, u.login " . $baseSql .
+                   " ORDER BY images.created_at DESC LIMIT :limit OFFSET :offset";
+    
+        $offset = ($page - 1) * $perPage;
+        $params["limit"] = (int) $perPage;
+        $params["offset"] = (int) $offset;
+    
+        $dataStmt = $this->db->prepare($dataSql);
+        $dataStmt->execute($params);
+        $images = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        $lastPage = max(1, (int) ceil($totalItems / $perPage));
+    
+        return [
+            'images' => $images,
+            'lastPage' => $lastPage
+        ];
     }
 }

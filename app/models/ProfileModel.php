@@ -22,13 +22,42 @@ class ProfileModel extends Model
         }
     }
 
-    public function getUserImages(int $userId): array
+    public function getUserImages(int $userId, $search, $page, $perPage): array
     {
         try {
-            $sql = "SELECT * FROM images WHERE user_id = :user_id";
-            $stmt = $this->db->prepare($sql);
-            $stmt->execute(['user_id' => $userId]);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $baseSql = "FROM images
+                        WHERE user_id = :user_id";
+            $params = [];
+            $params["user_id"] = $userId;
+
+            if ($search) {
+                $baseSql .= " AND (title ILIKE :search OR description ILIKE :search)";
+                $params["search"] = "%" . $search . "%";
+            }
+
+            $countSql = "SELECT COUNT(*) " . $baseSql;
+            $countStmt = $this->db->prepare($countSql);
+            $countStmt->execute($params);
+            $totalItems = (int) $countStmt->fetchColumn();
+
+            $dataSql = "SELECT * " . $baseSql .
+            " ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
+
+            $offset = ($page - 1) * $perPage;
+            $params["limit"] = (int) $perPage;
+            $params["offset"] = (int) $offset;
+
+            $dataStmt = $this->db->prepare($dataSql);
+            $dataStmt->execute($params);
+            $images = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $lastPage = max(1, (int) ceil($totalItems / $perPage));
+
+            return [
+                'images' => $images,
+                'lastPage' => $lastPage
+            ];
+
         } catch (PDOException $e) {
             echo("Ошибка при получении изображений: " . $e->getMessage());
             return [];
