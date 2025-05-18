@@ -1,5 +1,5 @@
-<body>
-    <div class='container-md d-flex flex-column justify-content-center align-items-center mt-5'>
+<body class="d-flex flex-column min-vh-100">
+    <div class='container-md d-flex flex-column justify-content-center align-items-center mt-5 flex-grow-1'>
         <form action="/main" method="get" class="w-50">        
             <div class="input-group w-100">
                 <input type="text" class="form-control" id='search' name="search" 
@@ -22,7 +22,7 @@
                 <?php foreach ($pageData['images'] as $image): ?>
                     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                         <div class='card h-100'>
-                            <img src="<?php echo "/public/images/uploads/" . $image["filename"] ?>" class='card-img-top rounded'
+                            <img src="<?php echo "/public/images/uploads/thumbnails/" . $image["filename"] ?>" class='card-img-top rounded'
                                 style="height: 200px; object-fit: cover;">
                             <div class='card-body'>
                                 <h5 class='card-title'><?php echo $image["title"] ?></h5>

@@ -1,34 +1,41 @@
 <?php
 
-class ProfileController extends Controller {
+class ProfileController extends Controller
+{
     private $pageTpl = '/views/profile.tpl.php';
     private $allowedFileTypes = ["jpg", "jpeg", "png"];
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->model = new ProfileModel();
         $this->view = new View();
     }
 
-    public function index() {
+    public function index()
+    {
         $this->checkCookie();
-        $this->pageData['pathToAvatar'] =  "/public/images/icons/person-circle.svg";
-        if(!empty($_SESSION['pathToAvatar'])) {
+        $this->pageData['pathToAvatar'] = "/public/images/icons/person-circle.svg";
+        if (!empty($_SESSION['pathToAvatar'])) {
             $this->pageData['pathToAvatar'] = $_SESSION['pathToAvatar'];
         }
-        
+
         $this->preparePageData();
         $this->view->renderLayout($this->pageTpl, $this->pageData);
     }
 
-    public function logout() {
+    public function logout()
+    {
         $this->clearSession();
         $this->redirect('/login');
     }
 
-    public function addNewPost() {
+    public function addNewPost()
+    {
         try {
             $this->validateFileUpload();
             $filename = $this->saveUploadedFile();
+
+            $this->saveThumbnail($filename);
 
             $title = trim($_POST['title']);
             $description = trim($_POST['description']);
@@ -50,9 +57,10 @@ class ProfileController extends Controller {
         $this->redirect('/profile');
     }
 
-    public function editPost() {
+    public function editPost()
+    {
         try {
-            $id = (int)$_POST['id'];
+            $id = (int) $_POST['id'];
             $title = trim($_POST['title']);
             $description = trim($_POST['description']);
 
@@ -71,11 +79,12 @@ class ProfileController extends Controller {
         $this->redirect('/profile');
     }
 
-    public function deletePost() {
+    public function deletePost()
+    {
         $id = $this->validateId($_POST['id']);
         try {
             $success = $this->model->deletePost($id);
-            
+
             if (!$success) {
                 throw new Exception('Ошибка при удалении изображения');
             }
@@ -88,7 +97,8 @@ class ProfileController extends Controller {
         $this->redirect('/profile');
     }
 
-    public function addWatermark() {
+    public function addWatermark()
+    {
         $id = $this->validateId($_POST['id']);
         try {
             $result = $this->model->getImageNameAndOwner($id);
@@ -111,7 +121,8 @@ class ProfileController extends Controller {
         $this->redirect('/profile');
     }
 
-    public function changePostVisibility() {
+    public function changePostVisibility()
+    {
         $id = $this->validateId($_POST['id']);
         try {
             $success = $this->model->changePostVisibility($id);
@@ -125,7 +136,8 @@ class ProfileController extends Controller {
         $this->redirect('/profile');
     }
 
-    private function getTextDimensions($text, $fontSize, $fontPath): array {
+    private function getTextDimensions($text, $fontSize, $fontPath): array
+    {
         $box = imagettfbbox($fontSize, 0, $fontPath, $text);
         return [
             'width' => $box[2] - $box[0],
@@ -134,7 +146,8 @@ class ProfileController extends Controller {
         ];
     }
 
-    private function getMaxTextWidth($lines, $fontSize, $fontPath): int {
+    private function getMaxTextWidth($lines, $fontSize, $fontPath): int
+    {
         $width = [];
         foreach ($lines as $line) {
             $box = imagettfbbox($fontSize, 0, $fontPath, $line);
@@ -142,7 +155,8 @@ class ProfileController extends Controller {
         }
         return max($width);
     }
-    private function addMultipleLineText($image, $lines, $padding, $lineSpacing){
+    private function addMultipleLineText($image, $lines, $padding, $lineSpacing)
+    {
         $lines = array_reverse($lines);
         $fontPath = $_SERVER['DOCUMENT_ROOT'] . "/public/font/Montserrat-SemiBoldItalic.ttf";
         $grey = imagecolorallocatealpha($image, 4, 41, 60, 10);
@@ -162,11 +176,12 @@ class ProfileController extends Controller {
             $textY -= ($currentTextHeight + $lineSpacing);
         }
 
-        $dimentions = [$textX, $imageHeight - $padding, $maxTextWidth, ($imageHeight - $padding) - ($textY+$lineSpacing)];
+        $dimentions = [$textX, $imageHeight - $padding, $maxTextWidth, ($imageHeight - $padding) - ($textY + $lineSpacing)];
         return $dimentions;
     }
 
-    private function addWatermarkToImage($filename) {
+    private function addWatermarkToImage($filename)
+    {
         $sourceImagePath = $_SERVER['DOCUMENT_ROOT'] . "/public/images/uploads/$filename";
 
         $login = $_SESSION['login'];
@@ -189,7 +204,7 @@ class ProfileController extends Controller {
         $bottomLeftTextX = $textDimentions[0];
         $bottomLeftTextY = $textDimentions[1];
         $textHeight = $textDimentions[3];
-    
+
 
         $logoPath = $_SERVER['DOCUMENT_ROOT'] . "/public/images/assets/logo_no_padding.png";
         $logo = @imagecreatefrompng($logoPath);
@@ -203,14 +218,20 @@ class ProfileController extends Controller {
         imagealphablending($resizedLogo, false);
         imagesavealpha($resizedLogo, true);
         imagecopyresampled(
-            $resizedLogo, $logo,
-            0, 0, 0, 0,
-            $newLogoWidth, $newLogoHeight,
-            $logoOrigWidth, $logoOrigHeight
+            $resizedLogo,
+            $logo,
+            0,
+            0,
+            0,
+            0,
+            $newLogoWidth,
+            $newLogoHeight,
+            $logoOrigWidth,
+            $logoOrigHeight
         );
 
         $logoPadding = intval($padding / 2);
-        $logoX = $bottomLeftTextX - $newLogoWidth -  $logoPadding ;
+        $logoX = $bottomLeftTextX - $newLogoWidth - $logoPadding;
         $logoY = $bottomLeftTextY - $newLogoHeight;
 
         imagecopy($image, $resizedLogo, $logoX, $logoY, 0, 0, $newLogoWidth, $newLogoHeight);
@@ -222,16 +243,18 @@ class ProfileController extends Controller {
         imagedestroy($resizedLogo);
     }
 
-    private function checkCookie() {
+    private function checkCookie()
+    {
         if (!isset($_SESSION['login'])) {
             $_SESSION['redirectAfterLogin'] = $_SERVER['REQUEST_URI'];
             $this->redirect('/login');
         }
     }
 
-    private function preparePageData() {
+    private function preparePageData()
+    {
         $search = $_GET['search'] ?? null;
-        $currentPage = (int)($_GET['page'] ?? 1);
+        $currentPage = (int) ($_GET['page'] ?? 1);
         $perPage = 12;
         $this->pageData['queryParams'] = $_GET;
         $this->pageData['currentPage'] = $currentPage;
@@ -245,13 +268,15 @@ class ProfileController extends Controller {
         $this->pageData['basePage'] = '/profile';
     }
 
-    private function clearSession() {
+    private function clearSession()
+    {
         unset($_SESSION['id']);
         unset($_SESSION['login']);
         unset($_SESSION['email']);
     }
 
-    private function validateFileUpload() {
+    private function validateFileUpload()
+    {
         if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
             throw new Exception('Ошибка загрузки файла');
         }
@@ -262,7 +287,8 @@ class ProfileController extends Controller {
         }
     }
 
-    private function saveUploadedFile(): string {
+    private function saveUploadedFile(): string
+    {
         $fileExtension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
         $filename = uniqid() . "." . $fileExtension;
 
@@ -274,25 +300,62 @@ class ProfileController extends Controller {
         return $filename;
     }
 
-    private function validatePostData(string $title, string $description) {
+    private function saveThumbnail($filename)
+    {
+        $sourcePath = $_SERVER['DOCUMENT_ROOT'] . "/public/images/uploads/" . $filename;
+        $thumbnailPath = $_SERVER['DOCUMENT_ROOT'] . "/public/images/uploads/thumbnails/" . $filename;
+        list($width, $height, $type) = getimagesize($sourcePath);
+
+        switch ($type) {
+            case IMAGETYPE_JPEG:
+                $imageGD = imagecreatefromjpeg($sourcePath);
+                break;
+            case IMAGETYPE_PNG:
+                $imageGD = imagecreatefrompng($sourcePath);
+                break;
+            default:
+                throw new Exception('Неподдерживаемый тип изображения');
+        }
+
+        $thumb = imagecreatetruecolor(300, 200);
+
+        imagecopyresampled($thumb, $imageGD, 0, 0, 0, 0, 300, 200, $width, $height);
+
+        switch ($type) {
+            case IMAGETYPE_JPEG:
+                imagejpeg($thumb, $thumbnailPath, 90);
+                break;
+            case IMAGETYPE_PNG:
+                imagepng($thumb, $thumbnailPath);
+                break;
+        }
+        imagedestroy($imageGD);
+        imagedestroy($thumb);
+    }
+
+    private function validatePostData(string $title, string $description)
+    {
         if (empty($title) || empty($description)) {
             throw new Exception('Все поля обязательны для заполнения');
         }
     }
 
-    private function validateId($id): int {
-        $id = (int)$id;
+    private function validateId($id): int
+    {
+        $id = (int) $id;
         if ($id <= 0) {
             throw new Exception('Некорректный ID');
         }
         return $id;
     }
 
-    private function getUserId(): int {
-        return (int)($_SESSION['id'] ?? 0);
+    private function getUserId(): int
+    {
+        return (int) ($_SESSION['id'] ?? 0);
     }
 
-    private function redirect(string $url) {
+    private function redirect(string $url)
+    {
         header("Location: $url");
         exit;
     }
