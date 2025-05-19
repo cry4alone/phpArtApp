@@ -41,7 +41,8 @@
 
                 <!-- Правая часть: элемент профиля -->
                 <ul class="navbar-nav ms-auto me-3">
-                    <li class="nav-item dropdown">
+                    <!-- Аватаp пользователя (виден только на больших экранах) -->
+                    <li class="nav-item dropdown d-none d-lg-block">
                         <a class="btn dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="/public/images/icons/person-circle.svg" alt="Profile" width="30" height="24" class="d-inline-block align-text-top">
                         </a>
@@ -49,6 +50,14 @@
                             <li><a class="dropdown-item" href="/profile">Профиль</a></li>
                             <li><a class="dropdown-item" href="/profile/logout">Выйти</a></li>
                         </ul>
+                    </li>
+
+                    <!-- Кнопки "Профиль" и "Выйти" (видны только на маленьких экранах) -->
+                    <li class="nav-item d-lg-none">
+                        <a class="nav-link" href="/profile">Профиль</a>
+                    </li>
+                    <li class="nav-item d-lg-none">
+                        <a class="nav-link" href="/profile/logout">Выйти</a>
                     </li>
                 </ul>
             </div>

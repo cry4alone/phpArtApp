@@ -8,7 +8,7 @@
 
 
     <div class='container-fluid d-flex flex-column justify-content-center align-items-center flex-grow-1'>
-        <div class='container-lg d-flex justify-content-between align-items-center mt-3 gap-5'>
+        <div class='container-lg d-flex flex-column flex-md-row justify-content-between align-items-center mt-3 gap-5'>
             <p class='display-4 mb-0'>Ваш профиль</p>
             <div class='d-flex flex-column gap-2'>
                 <div class='d-flex justify-content-between align-items-center mt-3 gap-3'>
@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <form action="/profile" method="get" class="w-50 mt-4">
+        <form action="/profile" method="get" class="w-100 w-sm-50 mt-4">
             <div class="input-group w-100">
                 <input type="text" class="form-control" id='search' name="search" value="<?= htmlspecialchars($pageData['search'] ?? '') ?>"
                     placeholder="Поиск">

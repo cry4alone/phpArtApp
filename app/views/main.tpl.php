@@ -1,8 +1,8 @@
 <body class="d-flex flex-column min-vh-100">
     <script src='./public/js/imageModal.js'></script>
-    <?php include(VIEW_PATH . "/includes/imageModal.php")?>
-    <div class='container-md d-flex flex-column justify-content-center align-items-center mt-5 flex-grow-1'>
-        <form action="/main" method="get" class="w-50">
+    <?php include(VIEW_PATH . "/includes/imageModal.php") ?>
+    <div class='container-md d-flex flex-column justify-content-center align-items-center flex-grow-1'>
+        <form action="/main" method="get" class="w-100 sm-w-50">
             <div class="input-group w-100">
                 <input type="text" class="form-control" id='search' name="search" value="<?= htmlspecialchars($pageData['search'] ?? '') ?>"
                     placeholder="Поиск">
@@ -10,12 +10,12 @@
                     <img src='/public/images/icons/search.svg' alt='search' class="mb-1">
                 </button>
             </div>
-            <div class='input-group w-100 mt-2 gap-2'>
-                <input type="text" class="form-control rounded" id="datepicker" name="date" value="<?= htmlspecialchars($pageData['date'] ?? '') ?>"
+            <div class="d-flex flex-column flex-md-row gap-2 mt-2 w-100">
+                <input type="text" class="form-control rounded flex-grow-1" id="datepicker" name="date" value="<?= htmlspecialchars($pageData['date'] ?? '') ?>"
                     placeholder="Выберите дату" readonly>
                 <input type='text' placeholder='Пользователь' id='user' name="createdBy" value="<?= htmlspecialchars($pageData['createdBy'] ?? '') ?>"
-                    class='form-control rounded'>
-                <button class='btn btn-danger rounded' id='reset'>Сбросить</button>
+                    class='form-control rounded flex-grow-1'>
+                <button class='btn btn-danger rounded flex-shrink-0 sm-w-50' id='reset'>Сбросить</button>
             </div>
         </form>
 

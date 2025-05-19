@@ -14,10 +14,10 @@
       <div class="col-md-2">
         <h5 class="fw-bold mb-3">Навигация</h5>
         <ul class="list-unstyled small">
-          <li><a href="#" class="text-white text-decoration-none mb-2 d-block">Главная</a></li>
-          <li><a href="#" class="text-white text-decoration-none mb-2 d-block">Профиль</a></li>
-          <li><a href="#" class="text-white text-decoration-none mb-2 d-block">Авторы</a></li>
-          <li><a href="#" class="text-white text-decoration-none">О нас</a></li>
+          <li><a href="/main" class="text-white text-decoration-none mb-2 d-block">Главная</a></li>
+          <li><a href="/profile" class="text-white text-decoration-none mb-2 d-block">Профиль</a></li>
+          <li><a href="/contacts" class="text-white text-decoration-none mb-2 d-block">Авторы</a></li>
+          <li><a href="/about" class="text-white text-decoration-none">О нас</a></li>
         </ul>
       </div>
 

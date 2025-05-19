@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <div class="bg-primary-subtle d-flex justify-content-center align-items-center py-5">
+  <div class="bg-dark text-white d-flex justify-content-center align-items-center py-5">
     <h1 class="h3 text-center">
       Мы не идеальны, но зато отвечаем на письма (иногда).<br> Обращайтесь к нам!
     </h1>
