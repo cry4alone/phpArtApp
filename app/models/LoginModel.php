@@ -20,6 +20,7 @@ class LoginModel extends Model {
             $_SESSION['id'] = $user['id'];
             $_SESSION['email'] = $user['email'];
             $_SESSION['pathToAvatar'] = $user['pathtoavatar'];
+            $_SESSION['isAdmin'] = $user['admin'];
             return true;
         }
     }

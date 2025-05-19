@@ -120,4 +120,24 @@ class ProfileModel extends Model
             return [];
         }
     }
+
+    public function addXMLImport(string $email, string $login, string $password, bool $admin): bool
+    {
+        try {
+            $sql = "INSERT INTO \"User\" (email, login, password, admin) VALUES (:email, :login, :password, :admin)";
+            $stmt = $this->db->prepare($sql);
+
+            return $stmt->execute([
+                'email' => $email,
+                'login' => $login,
+                'password' => $password,
+                'admin' => $admin
+            ]);
+            
+        }catch(Exception $e) {
+            echo("Ошибка при импорте XML: " . $e->getMessage());
+            return false;
+        }
+
+    }
 }

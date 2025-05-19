@@ -19,6 +19,7 @@ class ProfileController extends Controller
             $this->pageData['pathToAvatar'] = $_SESSION['pathToAvatar'];
         }
 
+
         $this->preparePageData();
         $this->view->renderLayout($this->pageTpl, $this->pageData);
     }
@@ -266,6 +267,7 @@ class ProfileController extends Controller
         $this->pageData['images'] = $result['images'];
         $this->pageData['lastPage'] = $result['lastPage'];
         $this->pageData['basePage'] = '/profile';
+        $this->pageData['isAdmin'] = $_SESSION['isAdmin'];
     }
 
     private function clearSession()
@@ -298,6 +300,44 @@ class ProfileController extends Controller
         }
 
         return $filename;
+    }
+
+    public function importXML()
+    {
+        try {
+            if (isset($_FILES['xml_file'])) {
+                $file = $_FILES['xml_file'];
+
+                if ($file['error'] !== UPLOAD_ERR_OK) {
+                    throw new Exception('Ошибка загрузки файла');
+                }
+                if (pathinfo($file['name'], PATHINFO_EXTENSION) !== 'xml') {
+                    throw new Exception('Недопустимый тип файла');
+                }
+
+                libxml_use_internal_errors(true);
+                $xml = simplexml_load_file($file['tmp_name']);
+                if ($xml === false) {
+                    $_SESSION['error'] = "Не удалось загрузить XML";
+                    libxml_clear_errors();
+                    $this->redirect('/profile');
+                }
+                foreach ($xml->user as $item) {
+                    $email = (string) $item->email;
+                    $login = (string) $item->login;
+                    $password = (string) $item->password;
+                    $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
+                    $admin = (bool) $item->admin;
+                    $success = $this->model->addXMLImport($email, $login, $passwordHashed, $admin);
+                }
+                if ($success)
+                    $_SESSION['success'] = 'Импорт успешно выполнен';
+                $this->redirect('/profile');
+            }
+        } catch (exception $e) {
+            $_SESSION['error'] = $e->getMessage();
+        }
+
     }
 
     private function saveThumbnail($filename)

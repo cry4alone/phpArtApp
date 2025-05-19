@@ -16,7 +16,8 @@ class DB {
                     email VARCHAR(100) NOT NULL,
                     login VARCHAR(100) NOT NULL,
                     password VARCHAR(100) NOT NULL,
-                    pathtoavatar VARCHAR(100)
+                    pathtoavatar VARCHAR(100),
+                    admin BOOLEAN DEFAULT FALSE
                 );
             ";
             $pdo->exec($createTableQuery);
