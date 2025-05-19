@@ -342,6 +342,10 @@ class ProfileController extends Controller
 
     private function saveThumbnail($filename)
     {
+        $thumbnailDir = $_SERVER['DOCUMENT_ROOT'] . "/public/images/uploads/thumbnails/";
+        if (!is_dir($thumbnailDir)) {
+            mkdir($thumbnailDir, 0775, true);
+        }
         $sourcePath = $_SERVER['DOCUMENT_ROOT'] . "/public/images/uploads/" . $filename;
         $thumbnailPath = $_SERVER['DOCUMENT_ROOT'] . "/public/images/uploads/thumbnails/" . $filename;
         list($width, $height, $type) = getimagesize($sourcePath);
