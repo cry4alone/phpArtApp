@@ -1,7 +1,7 @@
 <body class="d-flex flex-column min-vh-100">
     <script src='./public/js/imageModal.js'></script>
     <?php include(VIEW_PATH . "/includes/imageModal.php") ?>
-    <div class='container-md d-flex flex-column justify-content-center align-items-center flex-grow-1'>
+    <div class='container-md d-flex flex-column justify-content-center align-items-center flex-grow-1 mt-3'>
         <form action="/main" method="get" class="w-100 sm-w-50">
             <div class="input-group w-100">
                 <input type="text" class="form-control" id='search' name="search" value="<?= htmlspecialchars($pageData['search'] ?? '') ?>"

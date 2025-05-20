@@ -28,15 +28,15 @@
             </div>
         </div>
 
-        <form action="/profile" method="get" class="w-100 w-sm-50 mt-4">
-            <div class="input-group w-100">
-                <input type="text" class="form-control" id='search' name="search" value="<?= htmlspecialchars($pageData['search'] ?? '') ?>"
-                    placeholder="Поиск">
+        <form action="/profile" method="get" class="w-100 w-md-50 mt-4 custom-width">
+            <div class="container-lg input-group">
+                <input type="text" class="form-control" id='search' name="search" placeholder="Поиск">
                 <button class="btn btn-outline-secondary" type="submit" id="search-button">
                     <img src='/public/images/icons/search.svg' alt='search' class="mb-1">
                 </button>
             </div>
         </form>
+
 
         <div class='container-lg my-3'>
             <div class="row g-4">
