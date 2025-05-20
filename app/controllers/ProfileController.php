@@ -327,7 +327,7 @@ class ProfileController extends Controller
                     $login = (string) $item->login;
                     $password = (string) $item->password;
                     $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
-                    $admin = (bool) $item->admin;
+                    $admin = (string) $item->admin;
                     $success = $this->model->addXMLImport($email, $login, $passwordHashed, $admin);
                 }
                 if ($success)

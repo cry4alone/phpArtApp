@@ -121,7 +121,7 @@ class ProfileModel extends Model
         }
     }
 
-    public function addXMLImport(string $email, string $login, string $password, bool $admin): bool
+    public function addXMLImport(string $email, string $login, string $password, string $admin): bool
     {
         try {
             $sql = "INSERT INTO \"User\" (email, login, password, admin) VALUES (:email, :login, :password, :admin)";
