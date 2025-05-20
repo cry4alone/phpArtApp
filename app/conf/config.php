@@ -17,5 +17,10 @@ require_once(CONTROLLER_PATH. 'Controller.php');
 require_once(ROOT . '/conf' . '/functions.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php');
 
-Routing::buildRoute();
+try {
+    Routing::buildRoute();
+} catch (Throwable $e) {
+    include (VIEW_PATH . "pageNotFound.html");
+}
+
 
