@@ -41,7 +41,7 @@
         <div class='container-lg my-3'>
             <div class="row g-4">
                 <?php foreach ($pageData['images'] as $image): ?>
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
                         <div class='card h-100'>
                             <img src="<?php echo "/public/images/uploads/thumbnails/" . $image["filename"] ?>" class='card-img-top rounded'
                                 style="object-fit: cover;">

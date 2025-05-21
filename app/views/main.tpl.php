@@ -22,7 +22,7 @@
         <div class='container-lg my-3'>
             <div class='row g-4'>
                 <?php foreach ($pageData['images'] as $image): ?>
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
                         <button class="btn btn-link p-0 text-decoration-none" data-bs-toggle="modal" data-bs-target="#imageModal"
                             data-image="<?php echo "/public/images/uploads/" . $image['filename']; ?>">
                             <div class='card h-100'>
